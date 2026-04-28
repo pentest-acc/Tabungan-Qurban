@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masjid Jami'Nurul Hikmah</title>
+    <link rel="icon" type="image/png" href="449862012_461024876565544_8336005599360571041_n__2_-removebg-preview (1).png">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #d3d3d3; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        
+        .admin-header { margin-top: 30px; }
+        
+        .profile-border {
+            width: 130px; height: 130px;
+            border-radius: 50%;
+            border: 4px solid #00a8ff; /* Lingkaran biru */
+            margin: 0 auto 10px;
+            overflow: hidden; background: white;
+        }
+        .profile-border img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+
+        .btn-admin {
+            padding: 20px 40px;
+            border: 1px solid red; /* Border merah tipis */
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .table-area {
+            background: #ccc;
+            border: 1px solid #555;
+            border-radius: 20px 20px 0 0; /* Rounded atas sesuai gambar */
+            height: 400px;
+            width: 90%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+   <div class="admin-header">
+    <div class="profile-border" id="adminCircle">
+        <img id="adminPhoto" src="" alt="Profile">
+    </div>
+    <h2 id="adminUserDisplay">Username</h2>
+</div>
+
+<div class="btn-container">
+        <button class="btn-admin">tambah</button>
+        <button class="btn-admin">edit</button>
+        <button class="btn-admin">Hapus</button>
+        <button class="btn-admin" onclick="window.location.href='beranda.html'">kembali</button>
+    </div>
+
+<div class="table-area">
+    <table class="user-table" id="listUserAdmin">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Foto</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Kasta</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+</div>
+
+<script>
+    const savedData = JSON.parse(localStorage.getItem('userAccount'));
+    const adminCircle = document.getElementById('adminCircle');
+    const adminUserDisplay = document.getElementById('adminUserDisplay');
+
+    if (savedData) {
+        // Terapkan Gaya Kasta pada Profil Utama
+        if (savedData.email === 'ilham@gmail.com') {
+            adminCircle.classList.add('border-raja');
+            adminUserDisplay.innerHTML = `<i class="fas fa-crown mahkota"></i>${savedData.username}<i class="fas fa-crown mahkota"></i>`;
+        } else if (['admin1@gmail.com', 'admin2@gmail.com', 'admin3@gmail.com', 'admin4@gmail.com'].includes(savedData.email)) {
+            adminCircle.classList.add('border-staff');
+            adminUserDisplay.innerText = savedData.username;
+        }
+
+        if (savedData.photo) document.getElementById('adminPhoto').src = savedData.photo;
+
+        // Menampilkan Data User di Tabel (Simulasi dari database lokal)
+        const tbody = document.querySelector("#listUserAdmin tbody");
+        const kasta = savedData.email === 'ilham@gmail.com' ? "Raja" : (adminCircle.classList.contains('border-staff') ? "Staff" : "Kroco");
+        
+        tbody.innerHTML = `
+            <tr>
+                <td>1</td>
+                <td><img src="${savedData.photo}" width="40" style="border-radius:50%"></td>
+                <td>${savedData.username}</td>
+                <td>${savedData.email}</td>
+                <td><strong>${kasta}</strong></td>
+            </tr>
+        `;
+    }
+</script>
+</body>
+</html>

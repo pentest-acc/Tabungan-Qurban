@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Masjid Jami'Nurul Hikmah</title>
     <link rel="icon" type="image/png" href="449862012_461024876565544_8336005599360571041_n__2_-removebg-preview (1).png">
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css"/>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"/>
@@ -36,8 +36,9 @@
         <li><a href="#beranda" class="active">Beranda</a></li>
         <li><a href="#tentang">Tentang Kami</a></li>
         <li><a href="#layanan">Layanan</a></li>
-        <li><a href="#transparansi">Transparansi</a></li>
         <li><a href="#kontak" class="btn-kontak">Hubungi Kami</a></li>
+        <li><a href="profil.html">Profile</a></li>
+        
         </ul>
     </nav>
     </header>
@@ -46,28 +47,7 @@
         <div class="hero-content">
             <h1>Selamat Datang di <br><span>Masjid Jami' Nurul Hikmah</span></h1>
             <p>Pusat Ibadah dan Dakwah yang Menyejukkan Umat.</p>
-            <button onclick="bukaPopUpAdmin()" class="btn-admin-trigger">
-                <div class="text-halaman-admin">Halaman Admin</div>
-            </button>
-
-                <div id="popUpAdmin" class="admin-modal-overlay">
-                    <div class="admin-modal-content">
-                        <div class="profile-circle" id="popProfile">
-                            <img src="" id="popImg" alt="Profile">
-                        </div>
-                        <h3 id="popUsername">Username</h3>
-
-                        <div class="admin-modal-buttons">
-                            <button onclick="tutupPopUpAdmin()" class="btn-back">
-                            <i class="fas fa-arrow-left"></i> Kembali
-                            </button>
-                            <a href="halaman_admin.html" class="btn-next">
-                                Lanjut <i class="fas fa-arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        </div>
     </section>
 
     <section id="tentang">
@@ -78,14 +58,14 @@
             <h3 style="text-shadow: 1px 1px 1px black;">
                 <i class="fas fa-history"></i> Sejarah Masjid
             </h3>
-            <p style="text-shadow: 1px 1px 1px black;">
+            <p>
                 Masjid Jami' Nurul Hikmah didirikan pada tahun 1990 atas inisiatif warga sekitar yang merindukan tempat ibadah yang representatif. Berawal dari sebuah musala kayu sederhana, berkat gotong royong dan semangat jamaah, kini masjid telah berkembang menjadi pusat kegiatan dakwah dan sosial yang megah di wilayah ini. Nama "Nurul Hikmah" sendiri diambil dengan harapan masjid ini menjadi cahaya kebijaksanaan bagi seluruh umat.
             </p>
         </div>
 
         <div class="tentang-item">
             <h3 style="text-shadow: 1px 1px 1px black;">
-                <i class="fas fa-sitemap"></i><b>Struktur Pengurus</b>
+                <i class="fas fa-sitemap"></i><b> Struktur Pengurus</b>
             </h3>
             <div class="bagan-organisasi">
         
@@ -179,7 +159,7 @@
                         <strong>SEKSI PENDIDIKAN & PERIBADATAN</strong>
                         <ul style="text-align: left; list-style-type: none;">
                             <li>1. ISHOMUDIN</li>
-                            <li>2. PRAYITNO</li>
+                        <li>2. PRAYITNO</li>
                         </ul>
                     </div>
 
@@ -251,7 +231,7 @@
     </div>
 
         <div class="tentang-item">
-            <h3 style="text-shadow: 1px 1px 1px black;"><i class="fas fa-code"></i><b>Develope</b>r</h3>
+            <h3 style="text-shadow: 1px 1px 1px black;"><i class="fas fa-code"></i><b> Develope</b>r</h3>
                 <div class="developer-grid">
                     <div class="dev-card">
                         <div class="photo-border">
@@ -295,19 +275,13 @@
         <div class="table-controls">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Cari nama/username...">
+                <input type="text" placeholder="Cari data jamaah...">
             </div>
             
             <div class="button-group">
-                <a href="tambah_data.html" class="btn-action btn-tambah">
-                    <i class="fas fa-plus"></i> Tambah
+                <a href="menabung.html" class="btn-action btn-tambah">
+                    <<i class="fa-solid fa-piggy-bank"></i> Menabung
                 </a>
-                <button class="btn-action btn-edit">
-                    <i class="fas fa-pencil-alt"></i> Edit
-                </button>
-                <button class="btn-action btn-hapus">
-                    <i class="fas fa-trash"></i> Hapus
-                </button>
             </div>
         </div>
 
@@ -315,14 +289,12 @@
             <table id="tabelQurban">
                 <thead>
                     <tr>
-                        <th style="min-width: 10px; text-align: center;">No</th>
-                        <th style="min-width: 130px; text-align: center;">Username</th>
-                        <th style="min-width: 200px; text-align: center;">Nama</th>
-                        <th style="min-width: 180px; text-align: center;">No. Telepon</th>
-                        <th style="min-width: 130px; text-align: center;">Tanggal</th>
-                        <th style="min-width: 200px; text-align: center;">Nominal Setoran</th>
-                        <th style="min-width: 200px; text-align: center;">Saldo Kumulatif</th>
-                        <th style="min-width: 100px; text-align: center;">Status</th>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Tanggal</th>
+                        <th>Nominal Setoran</th>
+                        <th>Saldo Kumulatif</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -332,9 +304,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><span class="status-aktif">Aktif</span></td>
+                        <td><span class="status-aktif"></span></td>
                     </tr>
                 </tbody>
             </table>
@@ -349,18 +319,6 @@
         <div class="search-box">
             <i class="fas fa-search"></i>
             <input type="text" id="searchQurban" placeholder="Cari nama/username..." onkeyup="filterQurban()">
-        </div>
-
-        <div class="button-group">
-            <button class="btn-action btn-tambah" onclick="window.location.href='qurban.html'" style="width: 115px;"">
-                <i class="fas fa-plus"></i> Tambah
-            </button>
-            <button class="btn-action btn-edit" style="width: 85px;">
-                <i class="fas fa-pencil-alt"></i> Edit
-            </button>
-            <button class="btn-action btn-hapus" style="width: 95px; height: 42px;">
-                <i class="fas fa-trash"></i> Hapus
-            </button>
         </div>
     </div>
 
@@ -393,100 +351,6 @@
 </div>
     </section>
 
-    <section id="transparansi">
-    <div class="transparansi-container">
-        <h1>Transparansi Keuangan</h1>
-
-        <div class="keuangan-box">
-            <h3>Pemasukan</h3>
-            <div class="table-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Cari pemasukan...">
-                </div>
-                <div class="button-group">
-                    <a href="pemasukan.html" class="btn-action btn-tambah"><i class="fas fa-plus"></i> Tambah</a>
-                    <button class="btn-action btn-edit"><i class="fas fa-pencil-alt"></i> Edit</button>
-                    <button class="btn-action btn-hapus"><i class="fas fa-trash"></i> Hapus</button>
-                </div>
-            </div>
-            <div class="table-wrapper">
-                <table id="tabelPemasukan">
-                    <thead>
-                        <tr>
-                            <th style="width: 10px; text-align: center;">No</th>
-                            <th style="min-width: 300px; text-align: center;">Keterangan</th>
-                            <th style="min-width: 130px; text-align: center;">Tanggal</th>
-                            <th style="min-width: 200px; text-align: center;">Nama</th>
-                            <th style="min-width: 150px; text-align: center;">Jumlah</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4" style="text-align: center; font-weight: bold;">Total Pemasukan</td>
-                            <td id="totalPemasukan" style="font-weight: bold; color: #27ae60;">Rp 0</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-
-        <div class="keuangan-box">
-            <h3>Pengeluaran</h3>
-            <div class="table-controls">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Cari pengeluaran...">
-                </div>
-                <div class="button-group">
-                    <a href="pengeluaran.html" class="btn-action btn-tambah"><i class="fas fa-plus"></i> Tambah</a>
-                    <button class="btn-action btn-edit"><i class="fas fa-pencil-alt"></i> Edit</button>
-                    <button class="btn-action btn-hapus"><i class="fas fa-trash"></i> Hapus</button>
-                </div>
-            </div>
-            <div class="table-wrapper">
-                <table id="tabelPengeluaran">
-                    <thead>
-                        <tr>
-                            <th style="width: 10px; text-align: center;">No</th>
-                            <th style="min-width: 300px; text-align: center;">Keterangan</th>
-                            <th style="min-width: 130px; text-align: center;">Tanggal</th>
-                            <th style="min-width: 200px; text-align: center;">Harga</th>
-                            <th style="min-width: 100px; text-align: center;">Kuantiti</th>
-                            <th style="min-width: 250px; text-align: center;">Jumlah</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5" style="text-align: center; font-weight: bold;">Total Pengeluaran</td>
-                            <td id="totalPengeluaran" style="font-weight: bold; color: #e74c3c;">Rp 0</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
-    </div>
-</section>
-
     <section id="kontak">
     <div class="kontak-container">
         <h1>Kontak Kami</h1>
@@ -499,19 +363,19 @@
             <div class="kontak-kolom">
                 <h3>Ikuti Kami</h3>
                 <div class="button-list">
-                    <a href="https://www.instagram.com/ilham_mlna34/" target="_blank" class="btn-sosmed btn-ig">
-                        <i class="fab fa-instagram"></i> ilham_mlna34
+                    <a href="https://www.instagram.com/kentut.mendidik/" target="_blank" class="btn-sosmed btn-ig">
+                        <i class="fab fa-instagram"></i> kentut.mendidik
                     </a>
                     <a href="https://www.facebook.com/profile.php?id=100029704935360&locale=id_ID" target="_blank" class="btn-sosmed btn-fb">
                         <i class="fab fa-facebook-f"></i> Masjid Jami' Nurul Hikmah
                     </a>
-                    <a href="https://t.me/username" target="_blank" class="btn-sosmed btn-tele">
-                        <i class="fab fa-telegram-plane"></i> Telegram
+                    <a href="https://t.me/stephenbldwn" target="_blank" class="btn-sosmed btn-tele">
+                        <i class="fab fa-telegram-plane"></i> stephenbldwn
                     </a>
                     <a href="https://www.tiktok.com/@ilham_mlna34" target="_blank" class="btn-sosmed btn-tt">
                         <i class="fab fa-tiktok"></i> ilham_mlna34
                     </a>
-                    <a href="https://www.x.com/username" target="_blank" class="btn-sosmed btn-x">
+                    <a href="https://www.x.com/theboysurer" target="_blank" class="btn-sosmed btn-x">
                         <i class="fa-brands fa-x-twitter"></i> ilham_mlna34
                     </a>
                 </div>
@@ -529,6 +393,7 @@
                     <a href="https://maps.app.goo.gl/kSWfqmzqhHzRR73K9" target="_blank" class="btn-sosmed btn-map">
                         <i class="fas fa-map-marker-alt"></i> Jl. Damai Raya No.22 RT.003/RW.020, Kel. Harapan Jaya, Kec. Bekasi Utara, Kota Bekasi, Jawa Barat, 17124
                     </a>
+                    
                 </div>
             </div>
         </div>
@@ -540,7 +405,6 @@
     </footer>
 
     <script>
-    // Untuk Animasi Scroll di navbar
     const sections = document.querySelectorAll("section");
     const navLi = document.querySelectorAll(".nav-links li a");
 
@@ -563,36 +427,6 @@
             }
         });
     });
-
-
-    /*Untuk Pop up menuju halaman admin*/
-    function bukaPopUpAdmin() {
-    const savedData = JSON.parse(localStorage.getItem('userAccount'));
-    const profileCircle = document.getElementById('popProfile');
-    const userText = document.getElementById('popUsername');
-    
-    if (savedData) {
-        const email = savedData.email;
-        let usernameHTML = savedData.username;
-
-        // Reset Class
-        profileCircle.classList.remove('border-raja', 'border-staff');
-
-        // Logika Kasta
-        if (email === 'ilham@gmail.com') {
-            profileCircle.classList.add('border-raja');
-            usernameHTML = `<i class="fas fa-crown mahkota"></i>${savedData.username}<i class="fas fa-crown mahkota"></i>`;
-        } 
-        else if (['admin1@gmail.com', 'admin2@gmail.com', 'admin3@gmail.com', 'admin4@gmail.com'].includes(email)) {
-            profileCircle.classList.add('border-staff');
-        }
-
-        userText.innerHTML = usernameHTML;
-        if (savedData.photo) document.getElementById('popImg').src = savedData.photo;
-    }
-    document.getElementById('popUpAdmin').style.display = 'flex';
-}
-
 
     /* Untuk Menampilkan data yang sudah terinput ke beranda.html*/
     function tampilkanData() {
@@ -622,56 +456,6 @@
 
     // Jalankan fungsi saat halaman dibuka
     window.onload = tampilkanData;
-
-
-    //JS buat pemasukkan
-    function formatRupiah(angka) {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-    }
-
-    function muatDataKeuangan() {
-        // 1. PROSES PEMASUKAN
-    const listPemasukan = JSON.parse(localStorage.getItem('dataPemasukan')) || [];
-    const tbodyMasuk = document.querySelector("#tabelPemasukan tbody");
-    let totalMasuk = 0;
-    
-    tbodyMasuk.innerHTML = "";
-    listPemasukan.forEach((item, index) => {
-        totalMasuk += parseInt(item.jumlah);
-        tbodyMasuk.innerHTML += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.keterangan}</td>
-                <td>${item.tanggal}</td>
-                <td>${item.nama}</td>
-                <td>${formatRupiah(item.jumlah)}</td>
-            </tr>`;
-    });
-    document.getElementById('totalPemasukan').innerText = formatRupiah(totalMasuk);
-
-    // 2. PROSES PENGELUARAN
-    const listPengeluaran = JSON.parse(localStorage.getItem('dataPengeluaran')) || [];
-    const tbodyKeluar = document.querySelector("#tabelPengeluaran tbody");
-    let totalKeluar = 0;
-
-    tbodyKeluar.innerHTML = "";
-    listPengeluaran.forEach((item, index) => {
-        const subtotal = item.harga * item.kuantiti;
-        totalKeluar += subtotal;
-        tbodyKeluar.innerHTML += `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.keterangan}</td>
-                <td>${item.tanggal}</td>
-                <td>${formatRupiah(item.harga)}</td>
-                <td>${item.kuantiti}</td>
-                <td>${formatRupiah(subtotal)}</td>
-            </tr>`;
-    });
-    document.getElementById('totalPengeluaran').innerText = formatRupiah(totalKeluar);
-    }
-
-    document.addEventListener('DOMContentLoaded', muatDataKeuangan);
     </script>
     <script src="script.js"></script>
 </body>
