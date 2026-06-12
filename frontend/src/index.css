@@ -5,6 +5,7 @@
 @layer base {
   html {
     @apply antialiased;
+    scroll-behavior: smooth;
   }
   body {
     @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100;
@@ -66,4 +67,67 @@
   50% {
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
   }
+}
+
+/* ===== Utilitas desain premium (landing / login / register) ===== */
+
+/* Panel kaca (glassmorphism) */
+.glass {
+  @apply border border-white/50 bg-white/70 shadow-xl shadow-slate-900/5 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/20;
+}
+
+/* Pola grid halus untuk latar */
+.bg-grid {
+  background-image: linear-gradient(to right, rgb(100 116 139 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(100 116 139 / 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.bg-grid-fade {
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, black 40%, transparent 100%);
+}
+
+/* Blob gradient yang bergerak perlahan di latar belakang */
+.animate-blob {
+  animation: blob-move 18s ease-in-out infinite;
+}
+.animation-delay-3000 {
+  animation-delay: 3s;
+}
+.animation-delay-6000 {
+  animation-delay: 6s;
+}
+@keyframes blob-move {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -50px) scale(1.12);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.92);
+  }
+}
+
+/* Elemen melayang */
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.animate-float-slow {
+  animation: float-y 9s ease-in-out infinite;
+}
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+/* Teks gradien */
+.text-gradient {
+  @apply bg-gradient-to-r from-primary-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent;
 }
