@@ -39,9 +39,7 @@ export default function LoginPage() {
       </div>
       <div className="card w-full max-w-md p-8">
         <Link to="/" className="mb-6 flex items-center justify-center gap-2">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-600 text-xl font-bold text-white">
-            Q
-          </div>
+          <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-16 w-16 object-contain" />
         </Link>
         <h1 className="text-center text-2xl font-bold">Masuk ke Akun Anda</h1>
         <p className="mt-1 text-center text-sm text-slate-500 dark:text-slate-400">

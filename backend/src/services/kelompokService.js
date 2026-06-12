@@ -20,15 +20,22 @@ async function lengkapiSemuaKelompok(list) {
   return Promise.all(list.map((kelompok) => lengkapiKelompok(kelompok)));
 }
 
-// Daftar anggota kelompok beserta nama jamaah.
+// Daftar anggota kelompok beserta profil publik jamaah.
+// Informasi sensitif (no_telp, alamat, password) sengaja TIDAK disertakan —
+// sesama jamaah hanya boleh melihat nama, username, dan tanggal bergabung.
 async function daftarAnggota(idKelompok) {
   const details = await DetailKelompok.find({ id_kelompok: idKelompok }).lean();
   return Promise.all(
     details.map(async (detail) => {
       const jamaah = await Jamaah.findOne({ id_jamaah: detail.id_jamaah })
-        .select('id_jamaah nama_lengkap username no_telp')
+        .select('id_jamaah nama_lengkap username')
         .lean();
-      return { ...detail, nama_lengkap: jamaah?.nama_lengkap, jamaah };
+      return {
+        ...detail,
+        nama_lengkap: jamaah?.nama_lengkap,
+        jamaah,
+        bergabung_sejak: detail.createdAt,
+      };
     })
   );
 }

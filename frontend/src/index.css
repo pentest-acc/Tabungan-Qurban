@@ -40,3 +40,30 @@
     @apply px-4 py-3 text-sm text-slate-700 dark:text-slate-300;
   }
 }
+
+/* Running text pengumuman pembayaran global (ala notifikasi game online).
+   Durasi animasi diatur per tier lewat inline style animationDuration. */
+.marquee-track {
+  display: inline-block;
+  padding-left: 100%;
+  animation-name: marquee-run;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes marquee-run {
+  to {
+    transform: translateX(-100%);
+  }
+}
+.animate-glow {
+  animation: pulse-glow 1.2s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+  }
+}

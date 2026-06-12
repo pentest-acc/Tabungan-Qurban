@@ -24,7 +24,13 @@ export default function DaftarKelompok() {
     <div>
       <PageHeader
         title="Kelompok Qurban"
-        subtitle="Pilih kelompok aktif dan ajukan permintaan bergabung"
+        subtitle="Lihat kelompok yang tersedia — penempatan ditentukan oleh admin"
+        actions={
+          <Link to="/jamaah/gabung" className="btn-primary">
+            <UserGroupIcon className="h-5 w-5" />
+            Gabung Kelompok
+          </Link>
+        }
       />
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">

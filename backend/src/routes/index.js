@@ -9,6 +9,8 @@ router.use('/permintaan', require('./permintaanRoutes'));
 router.use('/tabungan', require('./tabunganRoutes'));
 router.use('/transaksi', require('./transaksiRoutes'));
 router.use('/payment', require('./paymentRoutes'));
+router.use('/notifikasi', require('./notifikasiRoutes'));
+router.use('/broadcast', require('./broadcastRoutes'));
 router.use('/laporan', require('./laporanRoutes'));
 
 module.exports = router;

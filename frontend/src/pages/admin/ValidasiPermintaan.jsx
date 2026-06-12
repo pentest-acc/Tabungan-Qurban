@@ -4,18 +4,22 @@ import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import useFetch from '../../hooks/useFetch';
 import useTableControls from '../../hooks/useTableControls';
 import permintaanService from '../../services/permintaanService';
+import kelompokService from '../../services/kelompokService';
 import PageHeader from '../../components/ui/PageHeader';
 import SearchInput from '../../components/ui/SearchInput';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState from '../../components/ui/ErrorState';
 import EmptyState from '../../components/ui/EmptyState';
 import Pagination from '../../components/ui/Pagination';
+import Modal from '../../components/ui/Modal';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
+import Spinner from '../../components/ui/Spinner';
 import Badge, { statusVariant } from '../../components/ui/Badge';
 import { formatDateTime } from '../../utils/format';
 
 export default function ValidasiPermintaan() {
   const { data, loading, error, refetch } = useFetch(() => permintaanService.getAll(), []);
+  const kelompokFetch = useFetch(() => kelompokService.getAll(), []);
   const controls = useTableControls(data, {
     searchFields: ['nama_jamaah', 'id_jamaah', 'nomor_kelompok', 'id_kelompok'],
     filterFn: (item, filter) => {
@@ -25,21 +29,54 @@ export default function ValidasiPermintaan() {
     },
   });
 
-  const [action, setAction] = useState(null); // { type: 'terima'|'tolak', item }
+  // Penempatan: admin memilih kelompok untuk jamaah yang diterima.
+  const [menempatkan, setMenempatkan] = useState(null); // permintaan yang sedang diproses
+  const [kelompokTujuan, setKelompokTujuan] = useState('');
+  const [menolak, setMenolak] = useState(null);
   const [processing, setProcessing] = useState(false);
 
-  const handleAction = async () => {
+  const kelompokList = Array.isArray(kelompokFetch.data)
+    ? kelompokFetch.data
+    : kelompokFetch.data?.data ?? [];
+  // Hanya kelompok aktif yang kuotanya belum penuh.
+  const kelompokTersedia = kelompokList.filter(
+    (kelompok) =>
+      String(kelompok.status || '').toLowerCase() === 'aktif' &&
+      (kelompok.jumlah_anggota ?? kelompok.anggota?.length ?? 0) < 7
+  );
+
+  const bukaPenempatan = (permintaan) => {
+    setKelompokTujuan(kelompokTersedia[0]?.id_kelompok || '');
+    setMenempatkan(permintaan);
+  };
+
+  const handleTerima = async () => {
+    if (!kelompokTujuan) {
+      toast.error('Pilih kelompok tujuan terlebih dahulu');
+      return;
+    }
     setProcessing(true);
     try {
-      const id = action.item.id_permintaan || action.item._id;
-      if (action.type === 'terima') {
-        await permintaanService.terima(id);
-        toast.success('Jamaah diterima dan dimasukkan ke detail kelompok');
-      } else {
-        await permintaanService.tolak(id);
-        toast.info('Permintaan bergabung ditolak');
-      }
-      setAction(null);
+      await permintaanService.terima(menempatkan.id_permintaan || menempatkan._id, {
+        id_kelompok: kelompokTujuan,
+      });
+      toast.success('Jamaah ditempatkan — notifikasi aplikasi & WhatsApp dikirim');
+      setMenempatkan(null);
+      refetch();
+      kelompokFetch.refetch();
+    } catch (err) {
+      toast.error(err.message || 'Gagal memproses permintaan');
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleTolak = async () => {
+    setProcessing(true);
+    try {
+      await permintaanService.tolak(menolak.id_permintaan || menolak._id);
+      toast.info('Permintaan bergabung ditolak');
+      setMenolak(null);
       refetch();
     } catch (err) {
       toast.error(err.message || 'Gagal memproses permintaan');
@@ -55,7 +92,7 @@ export default function ValidasiPermintaan() {
     <div>
       <PageHeader
         title="Validasi Permintaan Bergabung"
-        subtitle="Terima atau tolak permintaan jamaah untuk bergabung dengan kelompok qurban"
+        subtitle="Tentukan kelompok untuk jamaah yang ingin bergabung, atau tolak permintaannya"
       />
 
       <div className="card">
@@ -93,7 +130,7 @@ export default function ValidasiPermintaan() {
                 <thead className="border-b border-slate-200 dark:border-slate-800">
                   <tr>
                     <th className="table-th">Jamaah</th>
-                    <th className="table-th">Kelompok Tujuan</th>
+                    <th className="table-th">Kelompok</th>
                     <th className="table-th">Tanggal Pengajuan</th>
                     <th className="table-th">Catatan</th>
                     <th className="table-th">Status</th>
@@ -107,7 +144,11 @@ export default function ValidasiPermintaan() {
                         {item.jamaah?.nama_lengkap || item.nama_jamaah || item.id_jamaah}
                       </td>
                       <td className="table-td">
-                        Kelompok {item.kelompok?.nomor_kelompok || item.nomor_kelompok || item.id_kelompok}
+                        {item.nomor_kelompok ? (
+                          `Kelompok ${item.nomor_kelompok}`
+                        ) : (
+                          <span className="text-xs italic text-slate-400">belum ditentukan</span>
+                        )}
                       </td>
                       <td className="table-td">{formatDateTime(item.tanggal_pengajuan || item.createdAt)}</td>
                       <td className="table-td max-w-[200px] truncate">{item.catatan || '-'}</td>
@@ -118,14 +159,14 @@ export default function ValidasiPermintaan() {
                         {isPending(item) ? (
                           <div className="flex justify-end gap-2">
                             <button
-                              onClick={() => setAction({ type: 'terima', item })}
+                              onClick={() => bukaPenempatan(item)}
                               className="btn-primary !px-3 !py-1.5 !text-xs"
                             >
                               <CheckIcon className="h-4 w-4" />
-                              Terima
+                              Terima & Tempatkan
                             </button>
                             <button
-                              onClick={() => setAction({ type: 'tolak', item })}
+                              onClick={() => setMenolak(item)}
                               className="btn-danger !px-3 !py-1.5 !text-xs"
                             >
                               <XMarkIcon className="h-4 w-4" />
@@ -151,19 +192,63 @@ export default function ValidasiPermintaan() {
         )}
       </div>
 
+      {/* Modal penempatan kelompok */}
+      <Modal
+        open={!!menempatkan}
+        onClose={() => setMenempatkan(null)}
+        title="Tempatkan Jamaah ke Kelompok"
+        maxWidth="max-w-md"
+      >
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Pilih kelompok untuk{' '}
+          <strong>{menempatkan?.jamaah?.nama_lengkap || menempatkan?.nama_jamaah}</strong>. Jamaah
+          akan menerima notifikasi aplikasi dan WhatsApp setelah ditempatkan.
+        </p>
+        {kelompokTersedia.length === 0 ? (
+          <p className="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+            Tidak ada kelompok aktif dengan slot tersedia. Buat kelompok baru terlebih dahulu di
+            menu Kelompok Qurban.
+          </p>
+        ) : (
+          <div className="mt-4">
+            <label className="label">Kelompok Tujuan</label>
+            <select
+              className="input"
+              value={kelompokTujuan}
+              onChange={(e) => setKelompokTujuan(e.target.value)}
+            >
+              {kelompokTersedia.map((kelompok) => (
+                <option key={kelompok.id_kelompok || kelompok._id} value={kelompok.id_kelompok}>
+                  Kelompok {kelompok.nomor_kelompok} —{' '}
+                  {kelompok.jumlah_anggota ?? kelompok.anggota?.length ?? 0}/7 anggota
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+        <div className="mt-5 flex justify-end gap-2">
+          <button className="btn-secondary" onClick={() => setMenempatkan(null)} disabled={processing}>
+            Batal
+          </button>
+          <button
+            className="btn-primary"
+            onClick={handleTerima}
+            disabled={processing || kelompokTersedia.length === 0}
+          >
+            {processing && <Spinner className="h-4 w-4 text-white" />}
+            Terima & Tempatkan
+          </button>
+        </div>
+      </Modal>
+
       <ConfirmDialog
-        open={!!action}
-        onClose={() => setAction(null)}
-        onConfirm={handleAction}
+        open={!!menolak}
+        onClose={() => setMenolak(null)}
+        onConfirm={handleTolak}
         loading={processing}
-        danger={action?.type === 'tolak'}
-        title={action?.type === 'terima' ? 'Terima Jamaah' : 'Tolak Permintaan'}
-        message={
-          action?.type === 'terima'
-            ? `Terima "${action?.item?.jamaah?.nama_lengkap || action?.item?.nama_jamaah || 'jamaah ini'}" ke dalam kelompok? Kuota kelompok akan diperbarui.`
-            : `Tolak permintaan bergabung dari "${action?.item?.jamaah?.nama_lengkap || action?.item?.nama_jamaah || 'jamaah ini'}"?`
-        }
-        confirmLabel={action?.type === 'terima' ? 'Ya, Terima' : 'Ya, Tolak'}
+        title="Tolak Permintaan"
+        message={`Tolak permintaan bergabung dari "${menolak?.jamaah?.nama_lengkap || menolak?.nama_jamaah || 'jamaah ini'}"? Jamaah akan menerima notifikasi penolakan.`}
+        confirmLabel="Ya, Tolak"
       />
     </div>
   );

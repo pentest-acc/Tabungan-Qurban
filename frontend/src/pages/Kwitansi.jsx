@@ -48,9 +48,7 @@ export default function Kwitansi() {
         )}
 
         <div className="flex items-center gap-3 border-b border-slate-200 pb-5 dark:border-slate-800">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 text-xl font-bold text-white">
-            Q
-          </div>
+          <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-12 w-12 object-contain" />
           <div>
             <h1 className="text-xl font-bold">Kwitansi Pembayaran</h1>
             <p className="text-sm text-slate-500 dark:text-slate-400">Sistem Tabungan Qurban</p>

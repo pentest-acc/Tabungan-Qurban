@@ -60,9 +60,7 @@ export default function Sidebar({ open, onClose }) {
       >
         <div className="flex h-16 items-center justify-between border-b border-slate-200 px-5 dark:border-slate-800">
           <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg font-bold text-white">
-              Q
-            </div>
+            <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-10 w-10 object-contain" />
             <div>
               <p className="text-sm font-bold leading-tight">Tabungan Qurban</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">Sistem Informasi</p>
