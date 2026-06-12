@@ -114,7 +114,12 @@ export default function DashboardJamaah() {
                     {formatDateTime(trx.tanggal_bayar)} • {trx.metode_bayar || '-'}
                   </p>
                 </div>
-                <Badge variant={statusVariant(trx.jenis_transaksi)}>{trx.jenis_transaksi || '-'}</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant={statusVariant(trx.jenis_transaksi)}>{trx.jenis_transaksi || '-'}</Badge>
+                  <Badge variant={statusVariant(trx.status_pembayaran)}>
+                    {trx.status_pembayaran || '-'}
+                  </Badge>
+                </div>
               </li>
             ))}
           </ul>

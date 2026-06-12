@@ -10,7 +10,7 @@ import {
 } from '@heroicons/react/24/outline';
 import useFetch from '../../hooks/useFetch';
 import tabunganService from '../../services/tabunganService';
-import transaksiService from '../../services/transaksiService';
+import paymentService from '../../services/paymentService';
 import PageHeader from '../../components/ui/PageHeader';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState from '../../components/ui/ErrorState';
@@ -65,17 +65,16 @@ export default function Pembayaran() {
   const onSubmit = async (values) => {
     setSubmitting(true);
     try {
-      // Simulasi alur payment gateway: backend menerima webhook lalu mencatat transaksi.
-      await transaksiService.bayar({
+      // Buat checkout di payment gateway lalu arahkan ke halaman instruksi.
+      const pembayaran = await paymentService.checkout({
         id_tabungan: tabungan.id_tabungan || tabungan._id,
         total_bayar: Number(values.total_bayar),
         metode_bayar: values.metode_bayar,
         jenis_transaksi: values.jenis_transaksi,
       });
-      toast.success('Pembayaran berhasil! Saldo tabungan telah diperbarui.');
-      navigate('/jamaah/tagihan');
+      navigate(`/jamaah/pembayaran/instruksi/${pembayaran.nomor_referensi}`);
     } catch (err) {
-      toast.error(err.message || 'Pembayaran gagal, silakan coba lagi');
+      toast.error(err.message || 'Gagal membuat pembayaran, silakan coba lagi');
     } finally {
       setSubmitting(false);
     }

@@ -71,6 +71,7 @@ export default function MonitoringTransaksi() {
                     <th className="table-th">Jumlah</th>
                     <th className="table-th">Metode</th>
                     <th className="table-th">Jenis</th>
+                    <th className="table-th">Status</th>
                     <th className="table-th">Bukti</th>
                   </tr>
                 </thead>
@@ -86,6 +87,11 @@ export default function MonitoringTransaksi() {
                       <td className="table-td">{trx.metode_bayar || '-'}</td>
                       <td className="table-td">
                         <Badge variant={statusVariant(trx.jenis_transaksi)}>{trx.jenis_transaksi || '-'}</Badge>
+                      </td>
+                      <td className="table-td">
+                        <Badge variant={statusVariant(trx.status_pembayaran)}>
+                          {trx.status_pembayaran || '-'}
+                        </Badge>
                       </td>
                       <td className="table-td">
                         {trx.bukti_pembayaran ? (

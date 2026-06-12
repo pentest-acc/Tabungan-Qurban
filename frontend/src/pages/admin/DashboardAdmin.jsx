@@ -108,6 +108,7 @@ export default function DashboardAdmin() {
                   <th className="table-th">Tanggal</th>
                   <th className="table-th">Jumlah</th>
                   <th className="table-th">Jenis</th>
+                  <th className="table-th">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -119,6 +120,11 @@ export default function DashboardAdmin() {
                     <td className="table-td font-semibold">{formatRupiah(trx.total_bayar)}</td>
                     <td className="table-td">
                       <Badge variant={statusVariant(trx.jenis_transaksi)}>{trx.jenis_transaksi || '-'}</Badge>
+                    </td>
+                    <td className="table-td">
+                      <Badge variant={statusVariant(trx.status_pembayaran)}>
+                        {trx.status_pembayaran || '-'}
+                      </Badge>
                     </td>
                   </tr>
                 ))}

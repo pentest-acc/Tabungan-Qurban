@@ -102,6 +102,49 @@ Role: `jamaah`, `admin_biasa`, `kepala_admin`. Kepala admin memiliki seluruh aks
 | PUT | `/transaksi/:id_transaksi/status` | Admin | Update `status_pembayaran` — `{ status: "pending"\|"success"\|"failed" }` (saldo tabungan ikut dikoreksi) |
 | DELETE | `/transaksi/:id_transaksi` | Admin | Batalkan transaksi / refund (saldo dikembalikan) |
 
+## Payment Gateway
+
+| Method | Endpoint | Akses | Deskripsi |
+| --- | --- | --- | --- |
+| POST | `/payment/checkout` | Jamaah | Buat transaksi pembayaran (status `pending`) + instruksi bayar. Body: `{ id_tabungan, total_bayar, metode_bayar, jenis_transaksi }`. Jika masih ada pembayaran pending yang belum kadaluarsa, checkout lama dikembalikan (anti transaksi dobel) |
+| GET | `/payment/status/:nomor_referensi` | Jamaah (miliknya) / Admin | Cek status; pembayaran pending yang melewati `kadaluarsa` otomatis menjadi `failed` (timeout) |
+| POST | `/payment/webhook` | Publik (signature HMAC) | Callback dari payment gateway. Idempoten — pengiriman ganda tidak diproses dua kali |
+| POST | `/payment/simulate/:nomor_referensi` | Jamaah / Admin | Simulator sandbox: berperan sebagai gateway yang mengirim webhook bertanda tangan. Body: `{ hasil: "success"\|"failed" }` |
+
+**Respons checkout:**
+
+```json
+{
+  "success": true,
+  "message": "Checkout dibuat, selesaikan pembayaran sebelum batas waktu",
+  "data": {
+    "nomor_referensi": "PAY-1781240334238-A1B2C3",
+    "id_transaksi": "TRX-9F8E7D6C",
+    "total_bayar": 1000000,
+    "metode_bayar": "Transfer Bank",
+    "jenis_transaksi": "cicil",
+    "status_pembayaran": "pending",
+    "kode_bayar": "8808123456789012",
+    "kadaluarsa": "2026-06-12T07:30:00.000Z",
+    "instruksi": ["Buka aplikasi m-banking...", "..."]
+  }
+}
+```
+
+**Payload webhook (dari gateway ke `POST /payment/webhook`):**
+
+```json
+{
+  "nomor_referensi": "PAY-1781240334238-A1B2C3",
+  "status": "success",
+  "total_bayar": 1000000,
+  "bukti_pembayaran": "https://gateway.example/receipt/abc.png",
+  "signature": "hex HMAC-SHA256(nomor_referensi:status:total_bayar, PAYMENT_SERVER_KEY)"
+}
+```
+
+Keamanan webhook: signature `HMAC-SHA256` diverifikasi dengan perbandingan timing-safe; signature salah → `401`, payload tidak lengkap → `422`, referensi tidak dikenal → `404`, pembayaran sukses setelah kadaluarsa → `409` dan transaksi digugurkan. Setelah webhook `success`: bukti pembayaran disimpan dan `tabungan_qurban` (`total_terkumpul`, `sisa_tagihan_kelompok`) diperbarui otomatis.
+
 ## Laporan (admin)
 
 | Method | Endpoint | Deskripsi |

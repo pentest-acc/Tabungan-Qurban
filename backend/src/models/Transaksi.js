@@ -12,6 +12,10 @@ const transaksiSchema = new mongoose.Schema(
     jenis_transaksi: { type: String, enum: ['tunai', 'cicil'], required: true },
     bukti_pembayaran: { type: String, default: '' },
     status_pembayaran: { type: String, enum: ['pending', 'success', 'failed'], default: 'success', required: true },
+    // Field integrasi payment gateway (opsional, tidak melanggar validator $jsonSchema)
+    nomor_referensi: { type: String, index: true, sparse: true },
+    kode_bayar: { type: String, default: '' },
+    kadaluarsa: { type: Date },
   },
   { collection: 'transaksi', timestamps: true }
 );
