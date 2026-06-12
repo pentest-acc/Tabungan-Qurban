@@ -1,0 +1,144 @@
+import { Link, useParams } from 'react-router-dom';
+import {
+  ArrowLeftIcon,
+  UserGroupIcon,
+  CalendarDaysIcon,
+  ScaleIcon,
+  BanknotesIcon,
+} from '@heroicons/react/24/outline';
+import useFetch from '../../hooks/useFetch';
+import kelompokService from '../../services/kelompokService';
+import LoadingState from '../../components/ui/LoadingState';
+import ErrorState from '../../components/ui/ErrorState';
+import EmptyState from '../../components/ui/EmptyState';
+import Badge, { statusVariant } from '../../components/ui/Badge';
+import { formatRupiah, formatDate } from '../../utils/format';
+
+export default function DetailKelompok() {
+  const { id } = useParams();
+  const { data, loading, error, refetch } = useFetch(() => kelompokService.getById(id), [id]);
+
+  if (loading) return <LoadingState />;
+  if (error) return <ErrorState message={error} onRetry={refetch} />;
+
+  const kelompok = data?.data ?? data;
+  if (!kelompok) {
+    return <EmptyState title="Kelompok Tidak Ditemukan" message="Data kelompok tidak tersedia." />;
+  }
+
+  const sapi = kelompok.sapi ?? {};
+  const anggota = kelompok.anggota ?? [];
+  const tabungan = kelompok.tabungan ?? {};
+  const hargaSapi = sapi.harga_sapi ?? 23800000;
+  const totalTerkumpul = tabungan.total_terkumpul ?? 0;
+  const progress = hargaSapi > 0 ? Math.min(100, Math.round((totalTerkumpul / hargaSapi) * 100)) : 0;
+  const bisaGabung = String(kelompok.status || '').toLowerCase() === 'aktif' && anggota.length < 7;
+
+  return (
+    <div>
+      <Link
+        to="/jamaah/kelompok"
+        className="mb-4 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:underline"
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+        Kembali ke Daftar Kelompok
+      </Link>
+
+      <div className="card p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold">
+                Kelompok {kelompok.nomor_kelompok || kelompok.id_kelompok}
+              </h1>
+              <Badge variant={statusVariant(kelompok.status)}>{kelompok.status || '-'}</Badge>
+            </div>
+            <p className="mt-1 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+              <CalendarDaysIcon className="h-4 w-4" />
+              Periode: {formatDate(kelompok.tanggal_mulai)} — {formatDate(kelompok.tanggal_berakhir)}
+            </p>
+          </div>
+          {bisaGabung && (
+            <Link to={`/jamaah/kelompok/${id}/gabung`} className="btn-primary">
+              Ajukan Bergabung
+            </Link>
+          )}
+        </div>
+
+        {/* Progress tabungan kelompok */}
+        <div className="mt-6">
+          <div className="mb-1 flex items-center justify-between text-sm">
+            <span className="font-medium">Progres Tabungan Kelompok</span>
+            <span className="font-semibold text-primary-600">{progress}%</span>
+          </div>
+          <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <div className="h-full rounded-full bg-primary-600 transition-all" style={{ width: `${progress}%` }} />
+          </div>
+          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            {formatRupiah(totalTerkumpul)} dari target {formatRupiah(hargaSapi)}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {/* Info sapi */}
+        <div className="card p-6">
+          <h2 className="mb-4 font-semibold">Informasi Sapi Qurban</h2>
+          <dl className="space-y-3 text-sm">
+            <div className="flex items-center justify-between">
+              <dt className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <ScaleIcon className="h-4 w-4" /> Penanda Sapi
+              </dt>
+              <dd className="font-medium">{sapi.penanda_sapi || '-'}</dd>
+            </div>
+            <div className="flex items-center justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Bobot Estimasi</dt>
+              <dd className="font-medium">{sapi.bobot_estimasi ? `${sapi.bobot_estimasi} kg` : '-'}</dd>
+            </div>
+            <div className="flex items-center justify-between">
+              <dt className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                <BanknotesIcon className="h-4 w-4" /> Harga Sapi
+              </dt>
+              <dd className="font-semibold">{formatRupiah(hargaSapi)}</dd>
+            </div>
+            <div className="flex items-center justify-between">
+              <dt className="text-slate-500 dark:text-slate-400">Harga per Porsi</dt>
+              <dd className="font-semibold text-primary-600">
+                {formatRupiah(sapi.harga_porsi ?? 3400000)}
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        {/* Anggota */}
+        <div className="card p-6">
+          <h2 className="mb-4 flex items-center gap-2 font-semibold">
+            <UserGroupIcon className="h-5 w-5" />
+            Anggota Kelompok ({anggota.length}/7)
+          </h2>
+          {anggota.length === 0 ? (
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Belum ada anggota yang bergabung.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {anggota.map((member, idx) => (
+                <li
+                  key={member.id_detail || member.id_jamaah || idx}
+                  className="flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/60"
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+                    {idx + 1}
+                  </span>
+                  <span className="text-sm font-medium">
+                    {member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
