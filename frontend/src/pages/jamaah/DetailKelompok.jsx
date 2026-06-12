@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import {
   ArrowLeftIcon,
@@ -6,16 +7,19 @@ import {
   ScaleIcon,
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
+import { UserCircleIcon } from '@heroicons/react/24/solid';
 import useFetch from '../../hooks/useFetch';
 import kelompokService from '../../services/kelompokService';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState from '../../components/ui/ErrorState';
 import EmptyState from '../../components/ui/EmptyState';
+import Modal from '../../components/ui/Modal';
 import Badge, { statusVariant } from '../../components/ui/Badge';
 import { formatRupiah, formatDate } from '../../utils/format';
 
 export default function DetailKelompok() {
   const { id } = useParams();
+  const [anggotaDipilih, setAnggotaDipilih] = useState(null);
   const { data, loading, error, refetch } = useFetch(() => kelompokService.getById(id), [id]);
 
   if (loading) return <LoadingState />;
@@ -32,7 +36,6 @@ export default function DetailKelompok() {
   const hargaSapi = sapi.harga_sapi ?? 23800000;
   const totalTerkumpul = tabungan.total_terkumpul ?? 0;
   const progress = hargaSapi > 0 ? Math.min(100, Math.round((totalTerkumpul / hargaSapi) * 100)) : 0;
-  const bisaGabung = String(kelompok.status || '').toLowerCase() === 'aktif' && anggota.length < 7;
 
   return (
     <div>
@@ -58,11 +61,6 @@ export default function DetailKelompok() {
               Periode: {formatDate(kelompok.tanggal_mulai)} — {formatDate(kelompok.tanggal_berakhir)}
             </p>
           </div>
-          {bisaGabung && (
-            <Link to={`/jamaah/kelompok/${id}/gabung`} className="btn-primary">
-              Ajukan Bergabung
-            </Link>
-          )}
         </div>
 
         {/* Progress tabungan kelompok */}
@@ -123,22 +121,63 @@ export default function DetailKelompok() {
           ) : (
             <ul className="space-y-2">
               {anggota.map((member, idx) => (
-                <li
-                  key={member.id_detail || member.id_jamaah || idx}
-                  className="flex items-center gap-3 rounded-lg bg-slate-50 px-3 py-2 dark:bg-slate-800/60"
-                >
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
-                    {idx + 1}
-                  </span>
-                  <span className="text-sm font-medium">
-                    {member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
-                  </span>
+                <li key={member.id_detail || member.id_jamaah || idx}>
+                  <button
+                    onClick={() => setAnggotaDipilih(member)}
+                    className="flex w-full items-center gap-3 rounded-lg bg-slate-50 px-3 py-2 text-left transition-colors hover:bg-primary-50 dark:bg-slate-800/60 dark:hover:bg-primary-900/30"
+                    title="Lihat profil anggota"
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
+                      {idx + 1}
+                    </span>
+                    <span className="text-sm font-medium">
+                      {member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
+                    </span>
+                  </button>
                 </li>
               ))}
             </ul>
           )}
+          <p className="mt-3 text-xs text-slate-400">Klik anggota untuk melihat profilnya.</p>
         </div>
       </div>
+
+      {/* Profil publik anggota — informasi sensitif (no. telp, alamat) tidak ditampilkan */}
+      <Modal
+        open={!!anggotaDipilih}
+        onClose={() => setAnggotaDipilih(null)}
+        title="Profil Anggota"
+        maxWidth="max-w-sm"
+      >
+        {anggotaDipilih && (
+          <div className="flex flex-col items-center text-center">
+            <UserCircleIcon className="h-20 w-20 text-slate-300 dark:text-slate-600" />
+            <h3 className="mt-2 text-lg font-bold">
+              {anggotaDipilih.nama_lengkap || anggotaDipilih.jamaah?.nama_lengkap}
+            </h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              @{anggotaDipilih.jamaah?.username || '-'}
+            </p>
+            <dl className="mt-4 w-full space-y-2 rounded-lg bg-slate-50 p-4 text-left text-sm dark:bg-slate-800/60">
+              <div className="flex justify-between">
+                <dt className="text-slate-500 dark:text-slate-400">Kelompok</dt>
+                <dd className="font-medium">
+                  Kelompok {kelompok.nomor_kelompok || kelompok.id_kelompok}
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="text-slate-500 dark:text-slate-400">Bergabung sejak</dt>
+                <dd className="font-medium">
+                  {formatDate(anggotaDipilih.bergabung_sejak || anggotaDipilih.createdAt)}
+                </dd>
+              </div>
+            </dl>
+            <p className="mt-3 text-xs text-slate-400">
+              Demi privasi, informasi pribadi seperti nomor telepon dan alamat tidak ditampilkan.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

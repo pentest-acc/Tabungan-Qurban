@@ -6,13 +6,15 @@ const { kelompokRules } = require('../validators');
 
 router.use(authenticate);
 
+// Jamaah mengajukan permintaan bergabung (admin yang menentukan kelompok).
+// Didaftarkan sebelum '/:id' agar tidak tertangkap sebagai parameter id.
+router.post('/gabung', authorize('jamaah'), kelompokController.ajukanGabung);
+router.get('/gabung/status', authorize('jamaah'), kelompokController.statusGabung);
+
 // Semua user login boleh melihat kelompok
 router.get('/', kelompokController.getAll);
 router.get('/:id', kelompokController.getById);
 router.get('/:id/anggota', kelompokController.getAnggota);
-
-// Jamaah mengajukan permintaan bergabung
-router.post('/:id/gabung', authorize('jamaah'), kelompokController.ajukanGabung);
 
 // Pengelolaan hanya untuk admin
 router.post('/', authorize(...ADMIN_ROLES), kelompokRules, validate, kelompokController.create);

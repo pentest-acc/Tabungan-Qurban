@@ -9,8 +9,10 @@ const kelompokService = {
   remove: (id) => axiosClient.delete(`/kelompok/${id}`),
   // anggota kelompok (Detail_Kelompok)
   getAnggota: (id) => axiosClient.get(`/kelompok/${id}/anggota`),
-  // jamaah mengajukan permintaan bergabung
-  ajukanGabung: (id, payload = {}) => axiosClient.post(`/kelompok/${id}/gabung`, payload),
+  // jamaah mengajukan permintaan bergabung (admin yang menentukan kelompok)
+  ajukanGabung: (payload = {}) => axiosClient.post('/kelompok/gabung', payload),
+  // status permintaan gabung milik jamaah yang login
+  statusGabung: () => axiosClient.get('/kelompok/gabung/status'),
 };
 
 export default kelompokService;

@@ -48,10 +48,10 @@ export default function DashboardJamaah() {
         <div className="card">
           <EmptyState
             title="Anda Belum Tergabung dalam Kelompok"
-            message="Bergabunglah dengan kelompok qurban untuk mulai menabung."
+            message="Tekan tombol di bawah — admin akan menempatkan Anda di kelompok yang tersedia."
             action={
-              <Link to="/jamaah/kelompok" className="btn-primary">
-                Lihat Kelompok Qurban
+              <Link to="/jamaah/gabung" className="btn-primary">
+                Gabung Kelompok Qurban
               </Link>
             }
           />

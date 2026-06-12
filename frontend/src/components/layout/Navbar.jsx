@@ -9,6 +9,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { ROLE_LABELS } from '../../utils/format';
 import ThemeToggle from './ThemeToggle';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar({ onMenuClick }) {
   const { user, logout } = useAuth();
@@ -40,6 +41,7 @@ export default function Navbar({ onMenuClick }) {
       </button>
       <div className="hidden lg:block" />
       <div className="flex items-center gap-2">
+        {user?.role === 'jamaah' && <NotificationBell />}
         <ThemeToggle />
         <div className="relative" ref={dropdownRef}>
           <button

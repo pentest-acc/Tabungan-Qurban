@@ -100,32 +100,46 @@ exports.remove = asyncHandler(async (req, res) => {
   ok(res, null, 'Kelompok dibubarkan beserta tabungan terkait');
 });
 
-// POST /api/kelompok/:id/gabung — jamaah mengajukan permintaan bergabung
+// POST /api/kelompok/gabung — jamaah mengajukan permintaan bergabung TANPA
+// memilih kelompok; admin yang menentukan penempatan saat menerima.
 exports.ajukanGabung = asyncHandler(async (req, res) => {
-  const kelompok = await KelompokQurban.findOne({ id_kelompok: req.params.id });
-  if (!kelompok) throw new ApiError('Kelompok tidak ditemukan', 404);
-  if (kelompok.status !== 'aktif') {
-    throw new ApiError(`Kelompok berstatus ${kelompok.status}, tidak menerima anggota baru`, 409);
-  }
-
-  const jumlahAnggota = await DetailKelompok.countDocuments({ id_kelompok: kelompok.id_kelompok });
-  if (jumlahAnggota >= KUOTA_MAKSIMAL) throw new ApiError('Kuota 7 anggota sudah penuh', 409);
-
   const idJamaah = req.user.id_jamaah;
+
   const sudahAnggota = await DetailKelompok.exists({ id_jamaah: idJamaah });
   if (sudahAnggota) throw new ApiError('Anda sudah tergabung dalam kelompok', 409);
 
   const sudahMengajukan = await PermintaanGabung.exists({
-    id_kelompok: kelompok.id_kelompok,
     id_jamaah: idJamaah,
     status: 'pending',
   });
-  if (sudahMengajukan) throw new ApiError('Permintaan Anda sedang menunggu persetujuan', 409);
+  if (sudahMengajukan) throw new ApiError('Permintaan Anda sedang menunggu persetujuan admin', 409);
+
+  // Pastikan masih ada kelompok aktif yang bisa menampung.
+  const kelompokAktif = await KelompokQurban.find({ status: 'aktif' }).lean();
+  let adaSlot = false;
+  for (const kelompok of kelompokAktif) {
+    const jumlah = await DetailKelompok.countDocuments({ id_kelompok: kelompok.id_kelompok });
+    if (jumlah < KUOTA_MAKSIMAL) {
+      adaSlot = true;
+      break;
+    }
+  }
+  if (!adaSlot) {
+    throw new ApiError('Belum ada kelompok aktif dengan slot tersedia, coba lagi nanti', 409);
+  }
 
   const permintaan = await PermintaanGabung.create({
-    id_kelompok: kelompok.id_kelompok,
     id_jamaah: idJamaah,
     catatan: req.body.catatan || '',
   });
-  ok(res, permintaan, 'Permintaan terkirim, menunggu persetujuan admin', 201);
+  ok(res, permintaan, 'Permintaan terkirim, admin akan menentukan kelompok Anda', 201);
+});
+
+// GET /api/kelompok/gabung/status — status permintaan jamaah yang login
+exports.statusGabung = asyncHandler(async (req, res) => {
+  const permintaan = await PermintaanGabung.findOne({ id_jamaah: req.user.id_jamaah })
+    .sort({ tanggal_pengajuan: -1 })
+    .lean();
+  const anggota = await DetailKelompok.findOne({ id_jamaah: req.user.id_jamaah }).lean();
+  ok(res, { permintaan, sudah_tergabung: Boolean(anggota) });
 });

@@ -57,7 +57,7 @@ export default function App() {
             <Route path="/jamaah/profil" element={<ProfilJamaah />} />
             <Route path="/jamaah/kelompok" element={<DaftarKelompok />} />
             <Route path="/jamaah/kelompok/:id" element={<DetailKelompok />} />
-            <Route path="/jamaah/kelompok/:id/gabung" element={<AjukanGabung />} />
+            <Route path="/jamaah/gabung" element={<AjukanGabung />} />
             <Route path="/jamaah/tagihan" element={<DetailTagihan />} />
             <Route path="/jamaah/transaksi" element={<RiwayatTransaksi />} />
             <Route path="/jamaah/pembayaran" element={<Pembayaran />} />

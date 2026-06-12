@@ -9,9 +9,7 @@ export default function PublicNavbar() {
     <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-900/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg font-bold text-white">
-            Q
-          </div>
+          <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-10 w-10 object-contain" />
           <span className="text-lg font-bold">Tabungan Qurban</span>
         </Link>
         <div className="flex items-center gap-2">
