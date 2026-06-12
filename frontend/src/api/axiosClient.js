@@ -13,7 +13,15 @@ axiosClient.interceptors.request.use((config) => {
 });
 
 axiosClient.interceptors.response.use(
-  (response) => response.data,
+  (response) => {
+    // Backend membungkus respons dalam { success, message, data } — buka di sini
+    // agar seluruh service langsung menerima payload-nya.
+    const body = response.data;
+    if (body && typeof body === 'object' && 'success' in body && 'data' in body) {
+      return body.data;
+    }
+    return body;
+  },
   (error) => {
     if (error.response?.status === 401 && !error.config?.url?.includes('/auth/')) {
       localStorage.removeItem('token');
