@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import useFetch from '../../hooks/useFetch';
 import useTableControls from '../../hooks/useTableControls';
 import transaksiService from '../../services/transaksiService';
@@ -59,6 +60,7 @@ export default function RiwayatTransaksi() {
                     <th className="table-th">Jumlah</th>
                     <th className="table-th">Metode</th>
                     <th className="table-th">Jenis</th>
+                    <th className="table-th">Status</th>
                     <th className="table-th">Bukti</th>
                   </tr>
                 </thead>
@@ -73,6 +75,20 @@ export default function RiwayatTransaksi() {
                         <Badge variant={statusVariant(trx.jenis_transaksi)}>
                           {trx.jenis_transaksi || '-'}
                         </Badge>
+                      </td>
+                      <td className="table-td">
+                        {trx.status_pembayaran === 'pending' && trx.nomor_referensi ? (
+                          <Link
+                            to={`/jamaah/pembayaran/instruksi/${trx.nomor_referensi}`}
+                            className="text-xs font-semibold text-amber-600 hover:underline dark:text-amber-400"
+                          >
+                            pending — lanjutkan
+                          </Link>
+                        ) : (
+                          <Badge variant={statusVariant(trx.status_pembayaran)}>
+                            {trx.status_pembayaran || '-'}
+                          </Badge>
+                        )}
                       </td>
                       <td className="table-td">
                         {trx.bukti_pembayaran ? (

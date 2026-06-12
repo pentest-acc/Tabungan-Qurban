@@ -8,6 +8,7 @@ router.use('/kelompok', require('./kelompokRoutes'));
 router.use('/permintaan', require('./permintaanRoutes'));
 router.use('/tabungan', require('./tabunganRoutes'));
 router.use('/transaksi', require('./transaksiRoutes'));
+router.use('/payment', require('./paymentRoutes'));
 router.use('/laporan', require('./laporanRoutes'));
 
 module.exports = router;

@@ -20,6 +20,8 @@ import AjukanGabung from './pages/jamaah/AjukanGabung';
 import DetailTagihan from './pages/jamaah/DetailTagihan';
 import RiwayatTransaksi from './pages/jamaah/RiwayatTransaksi';
 import Pembayaran from './pages/jamaah/Pembayaran';
+import InstruksiPembayaran from './pages/jamaah/InstruksiPembayaran';
+import HasilPembayaran from './pages/jamaah/HasilPembayaran';
 
 // Admin (admin_biasa & kepala_admin)
 import DashboardAdmin from './pages/admin/DashboardAdmin';
@@ -58,6 +60,8 @@ export default function App() {
             <Route path="/jamaah/tagihan" element={<DetailTagihan />} />
             <Route path="/jamaah/transaksi" element={<RiwayatTransaksi />} />
             <Route path="/jamaah/pembayaran" element={<Pembayaran />} />
+            <Route path="/jamaah/pembayaran/instruksi/:ref" element={<InstruksiPembayaran />} />
+            <Route path="/jamaah/pembayaran/hasil/:ref" element={<HasilPembayaran />} />
           </Route>
         </Route>
 
