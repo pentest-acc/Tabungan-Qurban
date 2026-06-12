@@ -61,10 +61,17 @@ export default function HasilPembayaran() {
             <dt className="text-slate-500 dark:text-slate-400">Waktu</dt>
             <dd>{formatDateTime(data.tanggal_bayar)}</dd>
           </div>
-          {data.status_pembayaran === 'success' && data.bukti_pembayaran && (
+          {data.status_pembayaran === 'success' && (
             <div className="flex justify-between">
               <dt className="text-slate-500 dark:text-slate-400">Bukti</dt>
-              <dd className="max-w-[200px] truncate font-mono text-xs">{data.bukti_pembayaran}</dd>
+              <dd>
+                <Link
+                  to={`/jamaah/transaksi/kwitansi/${data.nomor_referensi}`}
+                  className="text-xs font-semibold text-primary-600 hover:underline"
+                >
+                  Lihat Kwitansi
+                </Link>
+              </dd>
             </div>
           )}
         </dl>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { BanknotesIcon, ClipboardDocumentListIcon } from '@heroicons/react/24/outline';
 import useFetch from '../../hooks/useFetch';
 import useTableControls from '../../hooks/useTableControls';
@@ -94,7 +95,14 @@ export default function MonitoringTransaksi() {
                         </Badge>
                       </td>
                       <td className="table-td">
-                        {trx.bukti_pembayaran ? (
+                        {trx.status_pembayaran === 'success' && trx.nomor_referensi ? (
+                          <Link
+                            to={`/admin/transaksi/kwitansi/${trx.nomor_referensi}`}
+                            className="text-primary-600 hover:underline"
+                          >
+                            Lihat
+                          </Link>
+                        ) : trx.bukti_pembayaran?.startsWith('http') ? (
                           <a
                             href={trx.bukti_pembayaran}
                             target="_blank"

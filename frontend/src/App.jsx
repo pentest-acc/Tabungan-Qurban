@@ -36,6 +36,7 @@ import DashboardKepala from './pages/kepala/DashboardKepala';
 import KelolaAdmin from './pages/kepala/KelolaAdmin';
 import Laporan from './pages/kepala/Laporan';
 
+import Kwitansi from './pages/Kwitansi';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/jamaah/pembayaran" element={<Pembayaran />} />
             <Route path="/jamaah/pembayaran/instruksi/:ref" element={<InstruksiPembayaran />} />
             <Route path="/jamaah/pembayaran/hasil/:ref" element={<HasilPembayaran />} />
+            <Route path="/jamaah/transaksi/kwitansi/:ref" element={<Kwitansi />} />
           </Route>
         </Route>
 
@@ -74,6 +76,7 @@ export default function App() {
             <Route path="/admin/kelompok" element={<DataKelompok />} />
             <Route path="/admin/permintaan" element={<ValidasiPermintaan />} />
             <Route path="/admin/transaksi" element={<MonitoringTransaksi />} />
+            <Route path="/admin/transaksi/kwitansi/:ref" element={<Kwitansi />} />
           </Route>
         </Route>
 
