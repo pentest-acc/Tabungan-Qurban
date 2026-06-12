@@ -47,6 +47,7 @@ async function ringkasanTabunganJamaah(idJamaah) {
 
   const sapi = await SapiQurban.findOne({ id_sapi: kelompok.id_sapi }).lean();
   const hargaPorsi = sapi ? sapi.harga_porsi : 3400000;
+  const jumlahAnggota = await DetailKelompok.countDocuments({ id_kelompok: detail.id_kelompok });
 
   const transaksiSaya = await Transaksi.find({
     id_tabungan: tabungan.id_tabungan,
@@ -63,6 +64,9 @@ async function ringkasanTabunganJamaah(idJamaah) {
     harga_porsi: hargaPorsi,
     total_dibayar: totalDibayar,
     sisa_tagihan_pribadi: Math.max(0, hargaPorsi - totalDibayar),
+    // Tagihan baru aktif setelah kelompok penuh 7 anggota.
+    jumlah_anggota: jumlahAnggota,
+    kelompok_penuh: jumlahAnggota >= 7,
   };
 }
 
