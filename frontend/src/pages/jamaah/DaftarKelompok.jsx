@@ -40,7 +40,7 @@ export default function DaftarKelompok() {
         >
           <option value="">Semua Status</option>
           <option value="aktif">Aktif</option>
-          <option value="penuh">Penuh</option>
+          <option value="selesai">Selesai</option>
           <option value="expired">Expired</option>
         </select>
       </div>

@@ -43,7 +43,7 @@ export default function DataKelompok() {
 
   const openCreate = () => {
     setEditing(null);
-    reset({ nomor_kelompok: '', id_sapi: '', tanggal_mulai: '', tanggal_berakhir: '', status: 'Aktif' });
+    reset({ nomor_kelompok: '', id_sapi: '', tanggal_mulai: '', tanggal_berakhir: '', status: 'aktif' });
     setModalOpen(true);
   };
 
@@ -54,7 +54,7 @@ export default function DataKelompok() {
       id_sapi: kelompok.id_sapi || kelompok.sapi?.id_sapi || '',
       tanggal_mulai: kelompok.tanggal_mulai?.slice(0, 10) || '',
       tanggal_berakhir: kelompok.tanggal_berakhir?.slice(0, 10) || '',
-      status: kelompok.status || 'Aktif',
+      status: kelompok.status || 'aktif',
     });
     setModalOpen(true);
   };
@@ -120,7 +120,7 @@ export default function DataKelompok() {
           >
             <option value="">Semua Status</option>
             <option value="aktif">Aktif</option>
-            <option value="penuh">Penuh</option>
+            <option value="selesai">Selesai</option>
             <option value="expired">Expired</option>
           </select>
         </div>
@@ -241,9 +241,9 @@ export default function DataKelompok() {
             />
           </div>
           <Select label="Status" {...register('status')}>
-            <option value="Aktif">Aktif</option>
-            <option value="Penuh">Penuh</option>
-            <option value="Expired">Expired</option>
+            <option value="aktif">Aktif</option>
+            <option value="selesai">Selesai</option>
+            <option value="expired">Expired</option>
           </Select>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" className="btn-secondary" onClick={() => setModalOpen(false)}>

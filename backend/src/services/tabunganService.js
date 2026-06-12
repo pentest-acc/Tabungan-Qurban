@@ -51,7 +51,7 @@ async function ringkasanTabunganJamaah(idJamaah) {
   const transaksiSaya = await Transaksi.find({
     id_tabungan: tabungan.id_tabungan,
     id_jamaah: idJamaah,
-    status: 'sukses',
+    status_pembayaran: 'success',
   }).lean();
   const totalDibayar = transaksiSaya.reduce((sum, t) => sum + t.total_bayar, 0);
 

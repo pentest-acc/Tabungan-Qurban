@@ -61,7 +61,7 @@ exports.kelompokRules = [
       }
       return true;
     }),
-  body('status').optional().isIn(['Aktif', 'Penuh', 'Expired']).withMessage('Status tidak valid'),
+  body('status').optional().isIn(['aktif', 'selesai', 'expired']).withMessage('Status tidak valid'),
 ];
 
 exports.transaksiRules = [
@@ -72,5 +72,5 @@ exports.transaksiRules = [
 ];
 
 exports.statusTransaksiRules = [
-  body('status').isIn(['pending', 'sukses', 'gagal']).withMessage('Status tidak valid'),
+  body('status').isIn(['pending', 'success', 'failed']).withMessage('Status tidak valid'),
 ];

@@ -33,14 +33,11 @@ async function daftarAnggota(idKelompok) {
   );
 }
 
-// Tandai kelompok "Penuh" bila kuota tercapai, atau kembali "Aktif" bila lowong.
-async function sinkronkanStatusKuota(idKelompok) {
-  const kelompok = await KelompokQurban.findOne({ id_kelompok: idKelompok });
-  if (!kelompok || kelompok.status === 'Expired') return kelompok;
+// Cek apakah kuota kelompok sudah penuh (status enum dokumen tidak memiliki
+// nilai "penuh", jadi penutupan akses dilakukan lewat pengecekan kuota ini).
+async function kuotaPenuh(idKelompok) {
   const jumlah = await DetailKelompok.countDocuments({ id_kelompok: idKelompok });
-  kelompok.status = jumlah >= KUOTA_MAKSIMAL ? 'Penuh' : 'Aktif';
-  await kelompok.save();
-  return kelompok;
+  return jumlah >= KUOTA_MAKSIMAL;
 }
 
 module.exports = {
@@ -48,5 +45,5 @@ module.exports = {
   lengkapiKelompok,
   lengkapiSemuaKelompok,
   daftarAnggota,
-  sinkronkanStatusKuota,
+  kuotaPenuh,
 };

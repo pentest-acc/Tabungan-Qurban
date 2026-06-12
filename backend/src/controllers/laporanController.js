@@ -15,9 +15,9 @@ exports.ringkasan = asyncHandler(async (req, res) => {
       Admin.countDocuments(),
       SapiQurban.countDocuments(),
       KelompokQurban.countDocuments(),
-      Transaksi.countDocuments({ status: 'sukses' }),
+      Transaksi.countDocuments({ status_pembayaran: 'success' }),
       Transaksi.aggregate([
-        { $match: { status: 'sukses' } },
+        { $match: { status_pembayaran: 'success' } },
         { $group: { _id: null, total: { $sum: '$total_bayar' } } },
       ]),
       TabunganQurban.aggregate([

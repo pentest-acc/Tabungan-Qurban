@@ -83,7 +83,7 @@ async function seed() {
     nomor_kelompok: '01',
     tanggal_mulai: new Date(),
     tanggal_berakhir: tahunDepan,
-    status: 'Aktif',
+    status: 'aktif',
   });
   const tabungan1 = await buatTabunganOtomatis(kelompok1);
 
@@ -92,7 +92,7 @@ async function seed() {
     nomor_kelompok: '02',
     tanggal_mulai: new Date(),
     tanggal_berakhir: tahunDepan,
-    status: 'Aktif',
+    status: 'aktif',
   });
   await buatTabunganOtomatis(kelompok2);
 
@@ -135,7 +135,7 @@ async function seed() {
       total_bayar: data.total,
       metode_bayar: data.metode,
       jenis_transaksi: data.jenis,
-      status: 'sukses',
+      status_pembayaran: 'success',
     });
     await catatPembayaran(tabungan1.id_tabungan, data.total);
   }
