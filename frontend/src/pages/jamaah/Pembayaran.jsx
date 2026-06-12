@@ -56,6 +56,25 @@ export default function Pembayaran() {
     );
   }
 
+  // Pembayaran hanya terbuka setelah kelompok penuh 7 anggota.
+  const jumlahAnggota = tabungan.jumlah_anggota ?? 0;
+  const kelompokPenuh = tabungan.kelompok_penuh ?? jumlahAnggota >= 7;
+  if (!kelompokPenuh) {
+    return (
+      <div className="card mx-auto max-w-2xl">
+        <EmptyState
+          title="Pembayaran Belum Dibuka"
+          message={`Kelompok Anda baru berisi ${jumlahAnggota}/7 anggota. Pembayaran tabungan qurban terbuka setelah kelompok penuh 7 orang.`}
+          action={
+            <Link to="/jamaah/tagihan" className="btn-secondary">
+              Kembali ke Tagihan
+            </Link>
+          }
+        />
+      </div>
+    );
+  }
+
   const hargaPorsi = tabungan.harga_porsi ?? tabungan.kelompok?.sapi?.harga_porsi ?? 3400000;
   const totalDibayar = tabungan.total_dibayar ?? tabungan.total_terkumpul_pribadi ?? 0;
   const sisaTagihan = tabungan.sisa_tagihan_pribadi ?? Math.max(0, hargaPorsi - totalDibayar);

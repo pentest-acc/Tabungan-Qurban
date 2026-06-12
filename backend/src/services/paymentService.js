@@ -74,6 +74,16 @@ async function buatCheckout({ idTabungan, idJamaah, totalBayar, metodeBayar, jen
   });
   if (!anggota) throw new ApiError('Anda bukan anggota kelompok tabungan ini', 403);
 
+  // Tagihan hanya aktif setelah kelompok penuh 7 anggota.
+  const jumlahAnggota = await DetailKelompok.countDocuments({ id_kelompok: tabungan.id_kelompok });
+  if (jumlahAnggota < 7) {
+    throw new ApiError(
+      `Tagihan belum aktif: kelompok baru berisi ${jumlahAnggota}/7 anggota. ` +
+        'Pembayaran dibuka setelah kelompok penuh.',
+      409
+    );
+  }
+
   // Cegah penumpukan tagihan: satu pembayaran pending per jamaah per tabungan.
   const masihPending = await Transaksi.findOne({
     id_tabungan: idTabungan,

@@ -1,5 +1,10 @@
 import { Link } from 'react-router-dom';
-import { BanknotesIcon, CreditCardIcon, CheckBadgeIcon } from '@heroicons/react/24/outline';
+import {
+  BanknotesIcon,
+  CreditCardIcon,
+  CheckBadgeIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline';
 import useFetch from '../../hooks/useFetch';
 import tabunganService from '../../services/tabunganService';
 import PageHeader from '../../components/ui/PageHeader';
@@ -36,6 +41,41 @@ export default function DetailTagihan() {
   }
 
   const kelompok = tabungan.kelompok ?? {};
+  const jumlahAnggota = tabungan.jumlah_anggota ?? 0;
+  const kelompokPenuh = tabungan.kelompok_penuh ?? jumlahAnggota >= 7;
+
+  // Tagihan baru aktif setelah kelompok penuh 7 anggota.
+  if (!kelompokPenuh) {
+    return (
+      <div>
+        <PageHeader
+          title="Detail Tagihan"
+          subtitle={`Kelompok ${kelompok.nomor_kelompok || tabungan.nomor_kelompok || '-'}`}
+        />
+        <div className="card p-8 text-center">
+          <UserGroupIcon className="mx-auto h-16 w-16 text-amber-500" />
+          <h2 className="mt-4 text-xl font-bold">Tagihan Belum Aktif</h2>
+          <p className="mx-auto mt-2 max-w-md text-sm text-slate-500 dark:text-slate-400">
+            Kelompok Anda baru berisi <strong>{jumlahAnggota}/7 anggota</strong>. Tagihan dan
+            pembayaran tabungan qurban akan terbuka otomatis setelah kelompok penuh 7 orang.
+          </p>
+          <div className="mx-auto mt-5 max-w-xs">
+            <div className="h-3 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+              <div
+                className="h-full rounded-full bg-amber-500 transition-all"
+                style={{ width: `${Math.round((jumlahAnggota / 7) * 100)}%` }}
+              />
+            </div>
+            <p className="mt-1 text-xs text-slate-400">{jumlahAnggota} dari 7 anggota</p>
+          </div>
+          <Link to="/jamaah/kelompok" className="btn-secondary mt-6">
+            Lihat Kelompok Saya
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const hargaPorsi = tabungan.harga_porsi ?? kelompok.sapi?.harga_porsi ?? 3400000;
   const totalDibayar = tabungan.total_dibayar ?? tabungan.total_terkumpul_pribadi ?? 0;
   const sisaTagihan = tabungan.sisa_tagihan_pribadi ?? Math.max(0, hargaPorsi - totalDibayar);

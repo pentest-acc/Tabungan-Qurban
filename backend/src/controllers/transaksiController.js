@@ -59,6 +59,15 @@ exports.bayar = asyncHandler(async (req, res) => {
   });
   if (!anggota) throw new ApiError('Anda bukan anggota kelompok tabungan ini', 403);
 
+  // Konsisten dengan alur payment gateway: bayar hanya bila kelompok penuh 7 anggota.
+  const jumlahAnggota = await DetailKelompok.countDocuments({ id_kelompok: tabungan.id_kelompok });
+  if (jumlahAnggota < 7) {
+    throw new ApiError(
+      `Tagihan belum aktif: kelompok baru berisi ${jumlahAnggota}/7 anggota`,
+      409
+    );
+  }
+
   // Upload bukti pembayaran jika dikirim; jika Cloudinary tidak dikonfigurasi,
   // gunakan bukti otomatis dari "payment gateway".
   let buktiUrl = '';
