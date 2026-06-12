@@ -91,7 +91,14 @@ export default function RiwayatTransaksi() {
                         )}
                       </td>
                       <td className="table-td">
-                        {trx.bukti_pembayaran ? (
+                        {trx.status_pembayaran === 'success' && trx.nomor_referensi ? (
+                          <Link
+                            to={`/jamaah/transaksi/kwitansi/${trx.nomor_referensi}`}
+                            className="text-primary-600 hover:underline"
+                          >
+                            Lihat
+                          </Link>
+                        ) : trx.bukti_pembayaran?.startsWith('http') ? (
                           <a
                             href={trx.bukti_pembayaran}
                             target="_blank"

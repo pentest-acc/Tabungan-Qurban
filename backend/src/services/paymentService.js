@@ -149,8 +149,9 @@ async function prosesWebhook(payload) {
   const update = { status_pembayaran: status };
   if (status === 'success') {
     update.tanggal_bayar = new Date();
-    update.bukti_pembayaran =
-      bukti_pembayaran || `https://sandbox-pg.tabungan-qurban.local/receipt/${nomor_referensi}`;
+    // Gateway asli mengirim URL bukti miliknya; sandbox memakai kwitansi
+    // internal aplikasi (path relatif, dirender frontend di /transaksi/kwitansi).
+    update.bukti_pembayaran = bukti_pembayaran || `/kwitansi/${nomor_referensi}`;
   }
 
   // Gerbang atomik anti dobel-proses.

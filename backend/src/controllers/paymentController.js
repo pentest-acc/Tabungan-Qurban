@@ -1,4 +1,7 @@
 const Transaksi = require('../models/Transaksi');
+const TabunganQurban = require('../models/TabunganQurban');
+const KelompokQurban = require('../models/KelompokQurban');
+const Jamaah = require('../models/Jamaah');
 const paymentService = require('../services/paymentService');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
@@ -61,6 +64,31 @@ exports.webhook = asyncHandler(async (req, res) => {
     nomor_referensi: transaksi.nomor_referensi,
     status_pembayaran: transaksi.status_pembayaran,
     diproses,
+  });
+});
+
+// GET /api/payment/receipt/:ref — data kwitansi internal (bukti pembayaran)
+exports.receipt = asyncHandler(async (req, res) => {
+  const transaksi = await Transaksi.findOne({ nomor_referensi: req.params.ref }).lean();
+  if (!transaksi) throw new ApiError('Transaksi tidak ditemukan', 404);
+  if (req.role === 'jamaah' && transaksi.id_jamaah !== req.user.id_jamaah) {
+    throw new ApiError('Anda tidak berhak melihat kwitansi ini', 403);
+  }
+
+  const [jamaah, tabungan] = await Promise.all([
+    Jamaah.findOne({ id_jamaah: transaksi.id_jamaah }).select('nama_lengkap username').lean(),
+    TabunganQurban.findOne({ id_tabungan: transaksi.id_tabungan }).lean(),
+  ]);
+  const kelompok = tabungan
+    ? await KelompokQurban.findOne({ id_kelompok: tabungan.id_kelompok })
+        .select('nomor_kelompok')
+        .lean()
+    : null;
+
+  ok(res, {
+    ...transaksi,
+    nama_jamaah: jamaah?.nama_lengkap || transaksi.id_jamaah,
+    nomor_kelompok: kelompok?.nomor_kelompok || '-',
   });
 });
 
