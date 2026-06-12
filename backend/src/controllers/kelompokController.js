@@ -45,7 +45,7 @@ exports.create = asyncHandler(async (req, res) => {
   const sapi = await SapiQurban.findOne({ id_sapi });
   if (!sapi) throw new ApiError('Sapi tidak ditemukan', 404);
 
-  const sapiDipakai = await KelompokQurban.exists({ id_sapi, status: { $ne: 'Expired' } });
+  const sapiDipakai = await KelompokQurban.exists({ id_sapi, status: { $ne: 'expired' } });
   if (sapiDipakai) throw new ApiError('Sapi sudah dipilih oleh kelompok lain', 409);
 
   const kelompok = await KelompokQurban.create({
@@ -70,7 +70,7 @@ exports.update = asyncHandler(async (req, res) => {
     if (!sapi) throw new ApiError('Sapi tidak ditemukan', 404);
     const sapiDipakai = await KelompokQurban.exists({
       id_sapi,
-      status: { $ne: 'Expired' },
+      status: { $ne: 'expired' },
       id_kelompok: { $ne: kelompok.id_kelompok },
     });
     if (sapiDipakai) throw new ApiError('Sapi sudah dipilih oleh kelompok lain', 409);
@@ -104,7 +104,7 @@ exports.remove = asyncHandler(async (req, res) => {
 exports.ajukanGabung = asyncHandler(async (req, res) => {
   const kelompok = await KelompokQurban.findOne({ id_kelompok: req.params.id });
   if (!kelompok) throw new ApiError('Kelompok tidak ditemukan', 404);
-  if (kelompok.status !== 'Aktif') {
+  if (kelompok.status !== 'aktif') {
     throw new ApiError(`Kelompok berstatus ${kelompok.status}, tidak menerima anggota baru`, 409);
   }
 

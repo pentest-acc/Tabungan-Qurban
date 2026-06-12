@@ -41,7 +41,7 @@ backend/
     │   ├── Admin.js           # role: admin_biasa | kepala_admin
     │   ├── Jamaah.js
     │   ├── SapiQurban.js      # harga default 23.8jt / porsi 3.4jt
-    │   ├── KelompokQurban.js  # status: Aktif | Penuh | Expired
+    │   ├── KelompokQurban.js  # status: aktif | selesai | expired
     │   ├── TabunganQurban.js  # 1:1 dengan kelompok
     │   ├── DetailKelompok.js  # keanggotaan (maks. 7)
     │   ├── PermintaanGabung.js
@@ -65,7 +65,7 @@ backend/
 ## Aturan Bisnis Utama
 
 - **Kelompok dibuat → Tabungan_Qurban otomatis dibuat** (1:1), sisa tagihan awal = harga sapi.
-- **Maksimal 7 anggota per kelompok**; saat penuh status kelompok menjadi `Penuh`.
+- **Maksimal 7 anggota per kelompok**; saat kuota penuh permintaan bergabung ditolak otomatis.
 - Permintaan bergabung berstatus `pending` → admin **terima** (masuk `Detail_Kelompok`) atau **tolak**.
 - Pembayaran (`tunai`/`cicil`) otomatis menambah `total_terkumpul` dan mengurangi `sisa_tagihan_kelompok`; pembatalan/refund mengembalikan saldo.
 - Password di-hash Bcrypt; seluruh endpoint terproteksi JWT + role-based access control.

@@ -22,7 +22,7 @@ exports.getAll = asyncHandler(async (req, res) => {
   const { jenis, status } = req.query;
   const filter = {};
   if (jenis) filter.jenis_transaksi = jenis;
-  if (status) filter.status = status;
+  if (status) filter.status_pembayaran = status;
   const list = await Transaksi.find(filter).sort({ tanggal_bayar: -1 }).lean();
   ok(res, await sertakanNamaJamaah(list));
 });
@@ -73,7 +73,7 @@ exports.bayar = asyncHandler(async (req, res) => {
     metode_bayar,
     jenis_transaksi,
     bukti_pembayaran: buktiUrl,
-    status: 'sukses',
+    status_pembayaran: 'success',
   });
 
   // "Trigger" otomatis: update saldo tabungan kelompok.
@@ -82,21 +82,21 @@ exports.bayar = asyncHandler(async (req, res) => {
 });
 
 // PUT /api/transaksi/:id/status — admin koreksi status pembayaran
-// Mengubah sukses -> gagal akan mengembalikan saldo tabungan, dan sebaliknya.
+// Mengubah success -> failed akan mengembalikan saldo tabungan, dan sebaliknya.
 exports.updateStatus = asyncHandler(async (req, res) => {
   const trx = await Transaksi.findOne({ id_transaksi: req.params.id });
   if (!trx) throw new ApiError('Transaksi tidak ditemukan', 404);
 
   const statusBaru = req.body.status;
-  if (trx.status === statusBaru) return ok(res, trx, 'Status tidak berubah');
+  if (trx.status_pembayaran === statusBaru) return ok(res, trx, 'Status tidak berubah');
 
-  if (trx.status === 'sukses' && statusBaru !== 'sukses') {
+  if (trx.status_pembayaran === 'success' && statusBaru !== 'success') {
     await batalkanPembayaran(trx.id_tabungan, trx.total_bayar);
-  } else if (trx.status !== 'sukses' && statusBaru === 'sukses') {
+  } else if (trx.status_pembayaran !== 'success' && statusBaru === 'success') {
     await catatPembayaran(trx.id_tabungan, trx.total_bayar);
   }
 
-  trx.status = statusBaru;
+  trx.status_pembayaran = statusBaru;
   await trx.save();
   ok(res, trx, 'Status transaksi berhasil diperbarui');
 });
@@ -106,7 +106,7 @@ exports.remove = asyncHandler(async (req, res) => {
   const trx = await Transaksi.findOne({ id_transaksi: req.params.id });
   if (!trx) throw new ApiError('Transaksi tidak ditemukan', 404);
 
-  if (trx.status === 'sukses') {
+  if (trx.status_pembayaran === 'success') {
     await batalkanPembayaran(trx.id_tabungan, trx.total_bayar);
   }
   await trx.deleteOne();

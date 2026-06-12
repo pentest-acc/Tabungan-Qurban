@@ -8,7 +8,7 @@ const kelompokSchema = new mongoose.Schema(
     nomor_kelompok: { type: String, required: true, trim: true },
     tanggal_mulai: { type: Date, required: true },
     tanggal_berakhir: { type: Date, required: true },
-    status: { type: String, enum: ['Aktif', 'Penuh', 'Expired'], default: 'Aktif' },
+    status: { type: String, enum: ['aktif', 'selesai', 'expired'], default: 'aktif' },
   },
   { collection: 'kelompok_qurban', timestamps: true }
 );

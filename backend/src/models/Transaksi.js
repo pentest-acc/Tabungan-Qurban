@@ -11,7 +11,7 @@ const transaksiSchema = new mongoose.Schema(
     metode_bayar: { type: String, required: true },
     jenis_transaksi: { type: String, enum: ['tunai', 'cicil'], required: true },
     bukti_pembayaran: { type: String, default: '' },
-    status: { type: String, enum: ['pending', 'sukses', 'gagal'], default: 'sukses' },
+    status_pembayaran: { type: String, enum: ['pending', 'success', 'failed'], default: 'success', required: true },
   },
   { collection: 'transaksi', timestamps: true }
 );

@@ -2,7 +2,7 @@ const PermintaanGabung = require('../models/PermintaanGabung');
 const DetailKelompok = require('../models/DetailKelompok');
 const KelompokQurban = require('../models/KelompokQurban');
 const Jamaah = require('../models/Jamaah');
-const { KUOTA_MAKSIMAL, sinkronkanStatusKuota } = require('../services/kelompokService');
+const { KUOTA_MAKSIMAL } = require('../services/kelompokService');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
 // GET /api/permintaan — daftar permintaan + data jamaah & kelompok
@@ -52,7 +52,6 @@ exports.terima = asyncHandler(async (req, res) => {
   });
   permintaan.status = 'diterima';
   await permintaan.save();
-  await sinkronkanStatusKuota(permintaan.id_kelompok);
 
   ok(res, permintaan, 'Jamaah diterima dan dimasukkan ke kelompok');
 });

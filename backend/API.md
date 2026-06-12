@@ -81,7 +81,7 @@ Role: `jamaah`, `admin_biasa`, `kepala_admin`. Kepala admin memiliki seluruh aks
 | Method | Endpoint | Deskripsi |
 | --- | --- | --- |
 | GET | `/permintaan?status=` | Daftar permintaan + data jamaah & kelompok |
-| PUT | `/permintaan/:id_permintaan/terima` | Terima → masuk Detail_Kelompok; kuota maks. **7 anggota**; status kelompok jadi `Penuh` saat kuota tercapai |
+| PUT | `/permintaan/:id_permintaan/terima` | Terima → masuk Detail_Kelompok; kuota maks. **7 anggota** (permintaan ditolak otomatis saat kuota penuh) |
 | PUT | `/permintaan/:id_permintaan/tolak` | Tolak permintaan |
 
 ## Tabungan
@@ -99,7 +99,7 @@ Role: `jamaah`, `admin_biasa`, `kepala_admin`. Kepala admin memiliki seluruh aks
 | GET | `/transaksi/saya` | Jamaah | Riwayat transaksi sendiri |
 | GET | `/transaksi/:id_transaksi` | Login | Detail transaksi |
 | POST | `/transaksi/bayar` | Jamaah | Setor dana. JSON atau `multipart/form-data` dengan file gambar `bukti` (diupload ke Cloudinary). Body: `{ id_tabungan, total_bayar, metode_bayar, jenis_transaksi: "tunai"\|"cicil" }`. Otomatis menambah `total_terkumpul` & mengurangi `sisa_tagihan_kelompok` |
-| PUT | `/transaksi/:id_transaksi/status` | Admin | Update status — `{ status: "pending"\|"sukses"\|"gagal" }` (saldo tabungan ikut dikoreksi) |
+| PUT | `/transaksi/:id_transaksi/status` | Admin | Update `status_pembayaran` — `{ status: "pending"\|"success"\|"failed" }` (saldo tabungan ikut dikoreksi) |
 | DELETE | `/transaksi/:id_transaksi` | Admin | Batalkan transaksi / refund (saldo dikembalikan) |
 
 ## Laporan (admin)
