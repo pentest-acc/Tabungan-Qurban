@@ -40,17 +40,19 @@ export default function Kwitansi() {
       </div>
 
       <div className="card relative overflow-hidden p-8">
-        {/* Stempel status */}
+        {/* Stempel status — ukuran & posisi menyesuaikan layar agar tidak
+            menabrak judul "Kwitansi Pembayaran" pada tampilan mobile. */}
         {lunas && (
-          <div className="pointer-events-none absolute right-6 top-6 rotate-12 rounded-lg border-4 border-primary-600/60 px-4 py-1 text-2xl font-extrabold uppercase tracking-widest text-primary-600/60">
+          <div className="pointer-events-none absolute right-3 top-3 rotate-12 rounded-lg border-[3px] border-primary-600/60 px-2.5 py-0.5 text-base font-extrabold uppercase tracking-widest text-primary-600/60 sm:right-6 sm:top-6 sm:border-4 sm:px-4 sm:py-1 sm:text-2xl">
             Lunas
           </div>
         )}
 
-        <div className="flex items-center gap-3 border-b border-slate-200 pb-5 dark:border-slate-800">
-          <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-12 w-12 object-contain" />
+        {/* pr-20 menyisakan ruang untuk stempel agar judul membungkus, bukan tertimpa */}
+        <div className="flex items-center gap-3 border-b border-slate-200 pb-5 pr-20 dark:border-slate-800 sm:pr-28">
+          <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-12 w-12 shrink-0 object-contain" />
           <div>
-            <h1 className="text-xl font-bold">Kwitansi Pembayaran</h1>
+            <h1 className="text-lg font-bold sm:text-xl">Kwitansi Pembayaran</h1>
             <p className="text-sm text-slate-500 dark:text-slate-400">Sistem Tabungan Qurban</p>
           </div>
         </div>

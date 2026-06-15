@@ -4,8 +4,43 @@ const SapiQurban = require('../models/SapiQurban');
 const KelompokQurban = require('../models/KelompokQurban');
 const TabunganQurban = require('../models/TabunganQurban');
 const Transaksi = require('../models/Transaksi');
+const DetailKelompok = require('../models/DetailKelompok');
 const { lengkapiSemuaKelompok } = require('../services/kelompokService');
 const { ok, asyncHandler } = require('../utils/response');
+
+// Susun progres pembayaran tiap anggota dalam sebuah kelompok.
+async function progresAnggota(kelompok) {
+  const hargaPorsi = kelompok.sapi?.harga_porsi ?? 0;
+  const idTabungan = kelompok.tabungan?.id_tabungan;
+  const details = await DetailKelompok.find({ id_kelompok: kelompok.id_kelompok }).lean();
+
+  return Promise.all(
+    details.map(async (detail) => {
+      const jamaah = await Jamaah.findOne({ id_jamaah: detail.id_jamaah })
+        .select('id_jamaah nama_lengkap username')
+        .lean();
+      const transaksi = idTabungan
+        ? await Transaksi.find({
+            id_tabungan: idTabungan,
+            id_jamaah: detail.id_jamaah,
+            status_pembayaran: 'success',
+          }).lean()
+        : [];
+      const totalDibayar = transaksi.reduce((sum, t) => sum + (t.total_bayar || 0), 0);
+      return {
+        id_jamaah: detail.id_jamaah,
+        nama_lengkap: jamaah?.nama_lengkap || '-',
+        username: jamaah?.username || '-',
+        harga_porsi: hargaPorsi,
+        total_dibayar: totalDibayar,
+        sisa_tagihan_pribadi: Math.max(0, hargaPorsi - totalDibayar),
+        progres: hargaPorsi > 0 ? Math.min(100, Math.round((totalDibayar / hargaPorsi) * 100)) : 0,
+        lunas: hargaPorsi > 0 && totalDibayar >= hargaPorsi,
+        jumlah_transaksi: transaksi.length,
+      };
+    })
+  );
+}
 
 // GET /api/laporan/ringkasan — statistik keseluruhan sistem
 exports.ringkasan = asyncHandler(async (req, res) => {
@@ -48,8 +83,15 @@ exports.ringkasan = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/laporan/kelompok — progres tabungan per kelompok
+// GET /api/laporan/kelompok — progres tabungan per kelompok + rincian anggota
 exports.perKelompok = asyncHandler(async (req, res) => {
   const list = await KelompokQurban.find().sort({ createdAt: -1 }).lean();
-  ok(res, await lengkapiSemuaKelompok(list));
+  const lengkap = await lengkapiSemuaKelompok(list);
+  const denganAnggota = await Promise.all(
+    lengkap.map(async (kelompok) => ({
+      ...kelompok,
+      anggota: await progresAnggota(kelompok),
+    }))
+  );
+  ok(res, denganAnggota);
 });

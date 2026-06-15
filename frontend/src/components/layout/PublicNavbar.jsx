@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: '#fitur', label: 'Fitur' },
   { href: '#cara-kerja', label: 'Cara Kerja' },
   { href: '#keamanan', label: 'Keamanan' },
+  { href: '#lokasi', label: 'Lokasi' },
 ];
 
 export default function PublicNavbar() {
@@ -39,7 +40,12 @@ export default function PublicNavbar() {
             alt="Logo Tabungan Qurban"
             className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3"
           />
-          <span className="text-lg font-bold tracking-tight">Tabungan Qurban</span>
+          <span className="flex flex-col leading-tight">
+            <span className="text-lg font-bold tracking-tight">Tabungan Qurban</span>
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+              Masjid Jami Nurul Hikmah
+            </span>
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
