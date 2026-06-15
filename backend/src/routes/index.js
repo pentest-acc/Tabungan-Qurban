@@ -12,5 +12,6 @@ router.use('/payment', require('./paymentRoutes'));
 router.use('/notifikasi', require('./notifikasiRoutes'));
 router.use('/broadcast', require('./broadcastRoutes'));
 router.use('/laporan', require('./laporanRoutes'));
+router.use('/profil', require('./profilRoutes'));
 
 module.exports = router;

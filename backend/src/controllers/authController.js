@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
 const Jamaah = require('../models/Jamaah');
+const { ambilProfil } = require('./profilController');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
 const signToken = (id, role) =>
@@ -27,13 +28,15 @@ exports.login = asyncHandler(async (req, res) => {
   const admin = await Admin.findOne({ username });
   if (admin && (await admin.comparePassword(password))) {
     const token = signToken(admin.id_admin, admin.role);
-    return ok(res, { token, user: { ...admin.toJSON(), role: admin.role } }, 'Login berhasil');
+    const profil = await ambilProfil(admin.id_admin);
+    return ok(res, { token, user: { ...admin.toJSON(), role: admin.role, ...profil } }, 'Login berhasil');
   }
 
   const jamaah = await Jamaah.findOne({ username });
   if (jamaah && (await jamaah.comparePassword(password))) {
     const token = signToken(jamaah.id_jamaah, 'jamaah');
-    return ok(res, { token, user: { ...jamaah.toJSON(), role: 'jamaah' } }, 'Login berhasil');
+    const profil = await ambilProfil(jamaah.id_jamaah);
+    return ok(res, { token, user: { ...jamaah.toJSON(), role: 'jamaah', ...profil } }, 'Login berhasil');
   }
 
   throw new ApiError('Username atau password salah', 401);
@@ -41,5 +44,7 @@ exports.login = asyncHandler(async (req, res) => {
 
 // GET /api/auth/me — profil user yang sedang login
 exports.me = asyncHandler(async (req, res) => {
-  ok(res, { ...req.user.toJSON(), role: req.role });
+  const idPengguna = req.role === 'jamaah' ? req.user.id_jamaah : req.user.id_admin;
+  const profil = await ambilProfil(idPengguna);
+  ok(res, { ...req.user.toJSON(), role: req.role, ...profil });
 });

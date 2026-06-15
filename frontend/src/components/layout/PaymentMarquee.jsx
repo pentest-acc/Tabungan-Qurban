@@ -43,10 +43,9 @@ function formatTanggalJam(value) {
   };
 }
 
-// Teriakan ala komentator gol — beda untuk pelunasan vs cicilan.
-function teriakanUntuk(item) {
-  if (item.jenis_transaksi === 'tunai') return 'GOOOL · LUNAS!';
-  return 'SETORAN MASUK!';
+// Label singkat pada "papan skor" — tanpa kata GOL, hanya status pembayaran.
+function labelUntuk(item) {
+  return item.jenis_transaksi === 'tunai' ? 'LUNAS' : 'SETORAN';
 }
 
 const DURASI_INTRO = 1500; // ms — lama intro "GOAL" sebelum running text
@@ -134,14 +133,54 @@ export default function PaymentMarquee() {
           className={`relative overflow-hidden border-b border-slate-200 dark:border-slate-800 ${tier.wrap}`}
         >
           {fase === 'intro' ? (
-            // ===== Intro ala selebrasi gol =====
-            <div className="goal-flash goal-shine flex items-center justify-center gap-2.5 py-1.5">
-              <span className="goal-pop text-base font-extrabold uppercase tracking-wide sm:text-lg">
-                {tier.ikon} {teriakanUntuk(current)} {tier.ikon}
-              </span>
-              <span className="hidden text-sm font-bold sm:inline">
-                {current.nama_jamaah} · {formatRupiah(current.total_bayar)}
-              </span>
+            // ===== Intro "papan skor" ala siaran TV — panel merakit + flash + shine =====
+            <div className="goal-flash flex items-center justify-center py-1.5">
+              <div className="goal-shine flex items-stretch overflow-hidden rounded-md text-sm shadow-sm">
+                {/* Tab status meluncur dari kiri */}
+                <motion.div
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 'auto', opacity: 1 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className="flex items-center gap-1.5 whitespace-nowrap bg-slate-900/90 px-2.5 py-1 text-white dark:bg-black/70"
+                >
+                  <motion.span
+                    initial={{ scale: 0, rotate: -25 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ delay: 0.12, type: 'spring', stiffness: 500, damping: 15 }}
+                  >
+                    {tier.ikon}
+                  </motion.span>
+                  <span className="text-xs font-extrabold uppercase tracking-widest">
+                    {labelUntuk(current)}
+                  </span>
+                </motion.div>
+
+                {/* Panel nama — efek papan skor "berganti" (slide naik) */}
+                <div className="flex items-center overflow-hidden bg-white px-3 py-1 dark:bg-slate-900">
+                  <motion.span
+                    initial={{ y: '130%' }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.18, duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+                    className="whitespace-nowrap font-bold text-slate-800 dark:text-slate-100"
+                  >
+                    {current.nama_jamaah}
+                    <span className="mx-1.5 text-slate-300 dark:text-slate-600">|</span>
+                    <span className="font-semibold text-slate-500 dark:text-slate-400">
+                      Kelompok {current.nomor_kelompok}
+                    </span>
+                  </motion.span>
+                </div>
+
+                {/* Badge nominal memantul masuk */}
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.34, type: 'spring', stiffness: 480, damping: 17 }}
+                  className="flex items-center whitespace-nowrap bg-primary-600 px-3 py-1 font-extrabold text-white"
+                >
+                  {formatRupiah(current.total_bayar)}
+                </motion.div>
+              </div>
             </div>
           ) : (
             // ===== Running text =====

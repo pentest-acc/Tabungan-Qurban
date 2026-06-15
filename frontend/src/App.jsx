@@ -30,6 +30,7 @@ import DataSapi from './pages/admin/DataSapi';
 import DataKelompok from './pages/admin/DataKelompok';
 import ValidasiPermintaan from './pages/admin/ValidasiPermintaan';
 import MonitoringTransaksi from './pages/admin/MonitoringTransaksi';
+import ProfilAdmin from './pages/admin/ProfilAdmin';
 
 // Kepala Admin
 import DashboardKepala from './pages/kepala/DashboardKepala';
@@ -76,6 +77,7 @@ export default function App() {
             <Route path="/admin/kelompok" element={<DataKelompok />} />
             <Route path="/admin/permintaan" element={<ValidasiPermintaan />} />
             <Route path="/admin/transaksi" element={<MonitoringTransaksi />} />
+            <Route path="/admin/profil" element={<ProfilAdmin />} />
             <Route path="/admin/transaksi/kwitansi/:ref" element={<Kwitansi />} />
           </Route>
         </Route>
