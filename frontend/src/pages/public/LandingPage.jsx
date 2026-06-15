@@ -12,9 +12,21 @@ import {
   BellAlertIcon,
   DocumentCheckIcon,
   LockClosedIcon,
+  MapPinIcon,
+  ClockIcon,
 } from '@heroicons/react/24/outline';
 import PublicNavbar from '../../components/layout/PublicNavbar';
 import { formatRupiah } from '../../utils/format';
+
+// Identitas & lokasi masjid penyelenggara.
+const MASJID = {
+  nama: 'Masjid Jami Nurul Hikmah',
+  alamat:
+    'Jl. Damai Raya No.22, RT.003/RW.020, Harapan Jaya, Kec. Bekasi Utara, Kota Bekasi, Jawa Barat 17124',
+};
+const MAP_QUERY = encodeURIComponent(`${MASJID.nama}, ${MASJID.alamat}`);
+const MAP_EMBED = `https://www.google.com/maps?q=${MAP_QUERY}&output=embed`;
+const MAP_LINK = `https://www.google.com/maps/search/?api=1&query=${MAP_QUERY}`;
 
 /* ====== Animasi bersama ====== */
 const fadeUp = {
@@ -446,6 +458,78 @@ export default function LandingPage() {
         </Reveal>
       </section>
 
+      {/* ===== LOKASI ===== */}
+      <section
+        id="lokasi"
+        className="relative scroll-mt-24 border-t border-slate-200/70 bg-slate-100/60 py-24 dark:border-slate-800/70 dark:bg-slate-900/40"
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <Reveal className="mx-auto max-w-2xl text-center">
+            <p className="text-sm font-bold uppercase tracking-widest text-primary-600">Lokasi</p>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              Kunjungi <span className="text-gradient">{MASJID.nama}</span>
+            </h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+              Tempat ibadah sekaligus penyelenggara tabungan qurban berjamaah.
+            </p>
+          </Reveal>
+
+          <div className="mt-12 grid items-stretch gap-8 lg:grid-cols-5">
+            {/* Info alamat */}
+            <Reveal className="lg:col-span-2">
+              <div className="glass flex h-full flex-col gap-6 rounded-3xl p-8">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-emerald-400 text-white shadow-lg shadow-primary-600/25">
+                    <MapPinIcon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="font-bold">Alamat</p>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                      {MASJID.alamat}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-emerald-400 text-white shadow-lg shadow-primary-600/25">
+                    <ClockIcon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <p className="font-bold">Pelayanan Qurban</p>
+                    <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
+                      Setiap hari, sepanjang tahun — daftar &amp; menabung kapan saja secara online.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={MAP_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-600/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary-700"
+                >
+                  Buka di Google Maps
+                  <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </div>
+            </Reveal>
+
+            {/* Peta interaktif */}
+            <Reveal className="lg:col-span-3">
+              <div className="glass h-full overflow-hidden rounded-3xl p-2">
+                <iframe
+                  title={`Peta lokasi ${MASJID.nama}`}
+                  src={MAP_EMBED}
+                  className="h-[360px] w-full rounded-2xl lg:h-full"
+                  style={{ border: 0, minHeight: '360px' }}
+                  loading="lazy"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       {/* ===== FOOTER ===== */}
       <footer className="border-t border-slate-200/70 bg-white/50 backdrop-blur dark:border-slate-800/70 dark:bg-slate-900/30">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
@@ -453,11 +537,20 @@ export default function LandingPage() {
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2">
                 <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-10 w-10 object-contain" />
-                <span className="text-lg font-bold">Tabungan Qurban</span>
+                <span className="flex flex-col leading-tight">
+                  <span className="text-lg font-bold">Tabungan Qurban</span>
+                  <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+                    {MASJID.nama}
+                  </span>
+                </span>
               </div>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-500 dark:text-slate-400">
                 Platform tabungan qurban berjamaah yang transparan, aman, dan mudah — dari niat
                 hingga qurban terlaksana.
+              </p>
+              <p className="mt-4 flex items-start gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-primary-600" />
+                <span>{MASJID.alamat}</span>
               </p>
             </div>
             <div>

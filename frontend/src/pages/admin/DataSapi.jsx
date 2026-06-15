@@ -18,7 +18,12 @@ import { Input } from '../../components/form/Fields';
 import { formatRupiah } from '../../utils/format';
 
 const DEFAULT_HARGA_SAPI = 23800000;
-const DEFAULT_HARGA_PORSI = 3400000;
+const PORSI_PER_SAPI = 7; // satu sapi untuk 7 orang
+const hitungHargaPorsi = (hargaSapi) => {
+  const angka = Number(hargaSapi);
+  if (!angka || angka < 1) return 0;
+  return Math.ceil(angka / PORSI_PER_SAPI);
+};
 
 export default function DataSapi() {
   const { data, loading, error, refetch } = useFetch(() => sapiService.getAll(), []);
@@ -33,8 +38,14 @@ export default function DataSapi() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+
+  // Harga porsi dihitung OTOMATIS dari harga sapi (dibagi 7) — ditampilkan
+  // langsung secara real-time saat admin mengetik harga sapi.
+  const hargaSapiInput = watch('harga_sapi');
+  const hargaPorsiPreview = hitungHargaPorsi(hargaSapiInput);
 
   const openCreate = () => {
     setEditing(null);
@@ -42,7 +53,6 @@ export default function DataSapi() {
       penanda_sapi: '',
       bobot_estimasi: '',
       harga_sapi: DEFAULT_HARGA_SAPI,
-      harga_porsi: DEFAULT_HARGA_PORSI,
     });
     setModalOpen(true);
   };
@@ -53,7 +63,6 @@ export default function DataSapi() {
       penanda_sapi: sapi.penanda_sapi,
       bobot_estimasi: sapi.bobot_estimasi,
       harga_sapi: sapi.harga_sapi,
-      harga_porsi: sapi.harga_porsi,
     });
     setModalOpen(true);
   };
@@ -65,7 +74,9 @@ export default function DataSapi() {
         ...values,
         bobot_estimasi: Number(values.bobot_estimasi),
         harga_sapi: Number(values.harga_sapi),
-        harga_porsi: Number(values.harga_porsi),
+        // Porsi ikut dikirim (preview), namun backend tetap menghitung ulang
+        // sebagai sumber kebenaran agar selalu konsisten = harga_sapi / 7.
+        harga_porsi: hitungHargaPorsi(values.harga_sapi),
       };
       if (editing) {
         await sapiService.update(editing.id_sapi || editing._id, payload);
@@ -203,25 +214,31 @@ export default function DataSapi() {
               min: { value: 1, message: 'Bobot tidak valid' },
             })}
           />
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input
-              label="Harga Sapi Total (Rp)"
-              type="number"
-              error={errors.harga_sapi}
-              {...register('harga_sapi', {
-                required: 'Harga sapi wajib diisi',
-                min: { value: 1, message: 'Harga tidak valid' },
-              })}
-            />
-            <Input
-              label="Harga per Porsi (Rp)"
-              type="number"
-              error={errors.harga_porsi}
-              {...register('harga_porsi', {
-                required: 'Harga porsi wajib diisi',
-                min: { value: 1, message: 'Harga tidak valid' },
-              })}
-            />
+          <Input
+            label="Harga Sapi Total (Rp)"
+            type="number"
+            error={errors.harga_sapi}
+            {...register('harga_sapi', {
+              required: 'Harga sapi wajib diisi',
+              min: { value: 1, message: 'Harga tidak valid' },
+            })}
+          />
+
+          {/* Harga per porsi OTOMATIS = harga sapi ÷ 7 (tidak diinput manual) */}
+          <div className="rounded-lg border border-primary-200 bg-primary-50 p-4 dark:border-primary-800/60 dark:bg-primary-900/20">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-medium text-primary-700 dark:text-primary-300">
+                  Harga per Porsi (otomatis)
+                </p>
+                <p className="mt-0.5 text-xs text-primary-600/80 dark:text-primary-400/80">
+                  Harga sapi dibagi {PORSI_PER_SAPI} orang
+                </p>
+              </div>
+              <p className="text-xl font-extrabold text-primary-700 dark:text-primary-300">
+                {formatRupiah(hargaPorsiPreview)}
+              </p>
+            </div>
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button type="button" className="btn-secondary" onClick={() => setModalOpen(false)}>

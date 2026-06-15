@@ -57,7 +57,10 @@ export default function LoginPage() {
         <div className="relative flex h-full flex-col justify-between p-12">
           <Link to="/" className="flex w-fit items-center gap-2.5">
             <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-11 w-11 object-contain" />
-            <span className="text-xl font-bold text-white">Tabungan Qurban</span>
+            <span className="flex flex-col leading-tight">
+              <span className="text-xl font-bold text-white">Tabungan Qurban</span>
+              <span className="text-xs font-medium text-primary-100/80">Masjid Jami Nurul Hikmah</span>
+            </span>
           </Link>
 
           <motion.div

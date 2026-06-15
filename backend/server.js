@@ -15,6 +15,7 @@ if (!process.env.JWT_SECRET) {
 
 const app = require('./src/app');
 const connectDB = require('./src/config/db');
+const { mulaiPenjadwalanKelompok } = require('./src/jobs/kelompokLifecycle');
 
 const PORT = process.env.PORT || 5000;
 
@@ -22,4 +23,6 @@ connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
   });
+  // Penjadwal otomatis: tutup periode kelompok (selesai/expired) & pembubaran 3 hari.
+  mulaiPenjadwalanKelompok();
 });

@@ -10,6 +10,12 @@
   body {
     @apply bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100;
   }
+  /* Sembunyikan ikon "reveal/clear password" bawaan browser (Edge & sebagian
+     Chromium) agar tidak muncul GANDA bersama tombol mata kustom kita. */
+  input::-ms-reveal,
+  input::-ms-clear {
+    display: none;
+  }
 }
 
 @layer components {
@@ -66,6 +72,64 @@
   }
   50% {
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Animasi "GOAL" ala siaran sepak bola untuk intro pengumuman pembayaran:
+   teks meledak masuk dengan pantulan, lalu kilatan latar. */
+.goal-pop {
+  animation: goal-pop 0.7s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+@keyframes goal-pop {
+  0% {
+    transform: scale(0.2) rotate(-12deg);
+    opacity: 0;
+    letter-spacing: -0.1em;
+  }
+  55% {
+    transform: scale(1.25) rotate(4deg);
+    opacity: 1;
+    letter-spacing: 0.08em;
+  }
+  75% {
+    transform: scale(0.95) rotate(-2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    letter-spacing: 0.04em;
+  }
+}
+.goal-flash {
+  animation: goal-flash 0.7s ease-out both;
+}
+@keyframes goal-flash {
+  0% {
+    background-color: rgba(255, 255, 255, 0.85);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.goal-shine {
+  position: relative;
+  overflow: hidden;
+}
+.goal-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: goal-shine 1.1s ease-out 0.2s both;
+}
+@keyframes goal-shine {
+  to {
+    transform: translateX(100%);
   }
 }
 
