@@ -1,4 +1,5 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { resolveMediaUrl } from '../../utils/media';
 
 // Avatar dengan border beranimasi ala Discord. Mendukung media gambar/GIF
 // (otomatis dari <img>) maupun video (autoplay, mute, loop). Jika tidak ada
@@ -18,16 +19,17 @@ export default function Avatar({
   className = '',
 }) {
   const ini = inisial(nama);
+  const mediaSrc = resolveMediaUrl(src);
   return (
     <div
       className={`avatar-ring avatar-ring--${border} ${className}`}
       style={{ width: size, height: size }}
     >
       <div className="avatar-ring__inner">
-        {src ? (
+        {mediaSrc ? (
           tipe === 'video' ? (
             <video
-              src={src}
+              src={mediaSrc}
               className="h-full w-full object-cover"
               autoPlay
               loop
@@ -35,7 +37,7 @@ export default function Avatar({
               playsInline
             />
           ) : (
-            <img src={src} alt={nama || 'Avatar'} className="h-full w-full object-cover" />
+            <img src={mediaSrc} alt={nama || 'Avatar'} className="h-full w-full object-cover" />
           )
         ) : ini ? (
           <span
