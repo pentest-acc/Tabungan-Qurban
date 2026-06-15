@@ -1,5 +1,6 @@
 const ProfilPengguna = require('../models/ProfilPengguna');
 const { uploadMedia, isConfigured } = require('../config/cloudinary');
+const { simpanMediaLokal } = require('../utils/localStorage');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
 // Daftar border yang diizinkan — HARUS sinkron dengan katalog di frontend
@@ -48,17 +49,17 @@ exports.updateMine = asyncHandler(async (req, res) => {
     update.border_profil = req.body.border_profil;
   }
 
-  // 2) Media (opsional)
+  // 2) Media (opsional). Pakai Cloudinary bila terkonfigurasi; jika tidak,
+  //    simpan ke disk server lokal agar fitur tetap berjalan tanpa akun.
   if (req.file) {
-    if (!isConfigured()) {
-      throw new ApiError(
-        'Penyimpanan media (Cloudinary) belum dikonfigurasi. Isi CLOUDINARY_* pada .env untuk mengunggah foto/video profil.',
-        503
-      );
+    if (isConfigured()) {
+      const { url, resourceType } = await uploadMedia(req.file.buffer);
+      update.foto_profil = url;
+      update.tipe_media = resourceType === 'video' ? 'video' : 'gambar';
+    } else {
+      update.foto_profil = simpanMediaLokal(req.file);
+      update.tipe_media = req.file.mimetype.startsWith('video/') ? 'video' : 'gambar';
     }
-    const { url, resourceType } = await uploadMedia(req.file.buffer);
-    update.foto_profil = url;
-    update.tipe_media = resourceType === 'video' ? 'video' : 'gambar';
   }
 
   const profil = await ProfilPengguna.findOneAndUpdate(
