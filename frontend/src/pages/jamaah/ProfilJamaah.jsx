@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '../../context/AuthContext';
 import jamaahService from '../../services/jamaahService';
 import PageHeader from '../../components/ui/PageHeader';
 import { Input, Textarea } from '../../components/form/Fields';
 import Spinner from '../../components/ui/Spinner';
+import Avatar from '../../components/ui/Avatar';
+import EditorProfilMedia from '../../components/profil/EditorProfilMedia';
 import { ROLE_LABELS } from '../../utils/format';
 
 export default function ProfilJamaah() {
@@ -49,10 +50,19 @@ export default function ProfilJamaah() {
   return (
     <div>
       <PageHeader title="Profil Saya" subtitle="Kelola informasi akun jamaah Anda" />
-      <div className="grid gap-6 lg:grid-cols-3">
+
+      <EditorProfilMedia />
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="card flex flex-col items-center p-6 text-center">
-          <UserCircleIcon className="h-24 w-24 text-slate-300 dark:text-slate-600" />
-          <h2 className="mt-2 text-lg font-bold">{user?.nama_lengkap || user?.username}</h2>
+          <Avatar
+            src={user?.foto_profil}
+            tipe={user?.tipe_media}
+            border={user?.border_profil}
+            nama={user?.nama_lengkap || user?.username}
+            size={104}
+          />
+          <h2 className="mt-3 text-lg font-bold">{user?.nama_lengkap || user?.username}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">@{user?.username}</p>
           <span className="mt-3 rounded-full bg-primary-100 px-3 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
             {ROLE_LABELS[user?.role] || 'Jamaah'}

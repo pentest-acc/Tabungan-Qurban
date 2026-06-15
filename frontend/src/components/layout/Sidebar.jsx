@@ -30,6 +30,7 @@ const MENUS = {
     { to: '/admin/kelompok', label: 'Kelompok Qurban', icon: UserGroupIcon },
     { to: '/admin/permintaan', label: 'Permintaan Gabung', icon: CheckBadgeIcon },
     { to: '/admin/transaksi', label: 'Monitoring Transaksi', icon: CreditCardIcon },
+    { to: '/admin/profil', label: 'Profil', icon: UserCircleIcon },
   ],
   kepala_admin: [
     { to: '/kepala/dashboard', label: 'Dashboard', icon: HomeIcon },
@@ -40,6 +41,7 @@ const MENUS = {
     { to: '/admin/kelompok', label: 'Kelompok Qurban', icon: UserGroupIcon },
     { to: '/admin/permintaan', label: 'Permintaan Gabung', icon: CheckBadgeIcon },
     { to: '/admin/transaksi', label: 'Monitoring Transaksi', icon: CreditCardIcon },
+    { to: '/admin/profil', label: 'Profil', icon: UserCircleIcon },
   ],
 };
 
@@ -63,7 +65,7 @@ export default function Sidebar({ open, onClose }) {
             <img src="/logo-masjid.png" alt="Logo Tabungan Qurban" className="h-10 w-10 object-contain" />
             <div>
               <p className="text-sm font-bold leading-tight">Tabungan Qurban</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Sistem Informasi</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">Masjid Jami Nurul Hikmah</p>
             </div>
           </div>
           <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800">

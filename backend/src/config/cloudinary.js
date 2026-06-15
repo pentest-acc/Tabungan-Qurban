@@ -24,4 +24,18 @@ function uploadBuffer(buffer, folder = 'tabungan-qurban/bukti') {
   });
 }
 
-module.exports = { cloudinary, uploadBuffer, isConfigured };
+// Upload media apa pun (gambar/GIF/video) ke Cloudinary. resource_type 'auto'
+// membiarkan Cloudinary mendeteksi sendiri jenis berkas. Mengembalikan url +
+// resource_type ('image' | 'video') agar frontend tahu cara menampilkannya.
+function uploadMedia(buffer, folder = 'tabungan-qurban/profil') {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, resource_type: 'auto' },
+      (err, result) =>
+        err ? reject(err) : resolve({ url: result.secure_url, resourceType: result.resource_type })
+    );
+    stream.end(buffer);
+  });
+}
+
+module.exports = { cloudinary, uploadBuffer, uploadMedia, isConfigured };

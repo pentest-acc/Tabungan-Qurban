@@ -356,9 +356,9 @@ export default function LandingPage() {
                 <motion.div
                   whileHover={{ y: -6 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="glass relative z-10 h-full rounded-3xl p-6"
+                  className="group glass relative z-10 h-full rounded-3xl p-6"
                 >
-                  <span className="text-5xl font-extrabold text-primary-600/15 dark:text-primary-400/15">
+                  <span className="inline-block origin-left text-5xl font-extrabold text-primary-600/15 transition-all duration-300 group-hover:scale-110 group-hover:text-primary-600 group-hover:[text-shadow:0_0_18px_rgba(16,185,129,0.55)] dark:text-primary-400/15 dark:group-hover:text-primary-400">
                     {item.step}
                   </span>
                   <h3 className="mt-2 text-lg font-bold">{item.title}</h3>

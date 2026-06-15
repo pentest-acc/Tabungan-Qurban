@@ -10,12 +10,16 @@ import { useAuth } from '../../context/AuthContext';
 import { ROLE_LABELS } from '../../utils/format';
 import ThemeToggle from './ThemeToggle';
 import NotificationBell from './NotificationBell';
+import Avatar from '../ui/Avatar';
 
 export default function Navbar({ onMenuClick }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  // Tautan profil sesuai peran (jamaah punya halaman sendiri; admin berbagi).
+  const profilPath = user?.role === 'jamaah' ? '/jamaah/profil' : '/admin/profil';
 
   useEffect(() => {
     const handler = (e) => {
@@ -48,7 +52,13 @@ export default function Navbar({ onMenuClick }) {
             onClick={() => setDropdownOpen((o) => !o)}
             className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
-            <UserCircleIcon className="h-8 w-8 text-slate-400" />
+            <Avatar
+              src={user?.foto_profil}
+              tipe={user?.tipe_media}
+              border={user?.border_profil}
+              nama={user?.nama_lengkap || user?.username}
+              size={38}
+            />
             <div className="hidden text-left sm:block">
               <p className="text-sm font-semibold leading-tight">{user?.nama_lengkap || user?.username}</p>
               <p className="text-xs text-slate-500 dark:text-slate-400">{ROLE_LABELS[user?.role] || 'Pengguna'}</p>
@@ -57,18 +67,16 @@ export default function Navbar({ onMenuClick }) {
           </button>
           {dropdownOpen && (
             <div className="card absolute right-0 mt-2 w-48 overflow-hidden py-1">
-              {user?.role === 'jamaah' && (
-                <button
-                  onClick={() => {
-                    setDropdownOpen(false);
-                    navigate('/jamaah/profil');
-                  }}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                >
-                  <UserCircleIcon className="h-4 w-4" />
-                  Profil Saya
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  setDropdownOpen(false);
+                  navigate(profilPath);
+                }}
+                className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                <UserCircleIcon className="h-4 w-4" />
+                Profil Saya
+              </button>
               <button
                 onClick={handleLogout}
                 className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-slate-100 dark:text-red-400 dark:hover:bg-slate-800"
