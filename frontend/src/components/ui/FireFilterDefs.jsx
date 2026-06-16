@@ -32,43 +32,43 @@ export default function FireFilterDefs() {
       style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden' }}
     >
       <defs>
-        {/* Avatar besar */}
+        {/* Avatar besar — frekuensi tinggi (lidah halus) + skala kecil (ramping) */}
         <FireFilter
           id="api-fire-lg"
-          baseFrequency="0.04 0.045"
+          baseFrequency="0.13 0.15"
           octaves={3}
-          scale={13}
-          freqValues="0.04 0.045; 0.046 0.06; 0.036 0.04; 0.04 0.045"
+          scale={7}
+          freqValues="0.13 0.15; 0.15 0.19; 0.11 0.13; 0.13 0.15"
           seedValues="2;7;4;9;1;6;2"
-          seedDur="1.1s"
+          seedDur="0.9s"
         />
         <FireFilter
           id="api-fire-lg2"
-          baseFrequency="0.035 0.05"
+          baseFrequency="0.11 0.14"
           octaves={3}
-          scale={19}
-          freqValues="0.035 0.05; 0.04 0.066; 0.03 0.045; 0.035 0.05"
+          scale={9}
+          freqValues="0.11 0.14; 0.13 0.18; 0.09 0.12; 0.11 0.14"
           seedValues="5;1;8;3;9;5"
-          seedDur="0.9s"
+          seedDur="0.75s"
         />
         {/* Avatar kecil */}
         <FireFilter
           id="api-fire-sm"
-          baseFrequency="0.07 0.08"
+          baseFrequency="0.22 0.25"
           octaves={2}
-          scale={6}
-          freqValues="0.07 0.08; 0.08 0.1; 0.062 0.072; 0.07 0.08"
+          scale={4}
+          freqValues="0.22 0.25; 0.25 0.3; 0.19 0.22; 0.22 0.25"
           seedValues="2;7;4;9;1;6;2"
-          seedDur="1s"
+          seedDur="0.85s"
         />
         <FireFilter
           id="api-fire-sm2"
-          baseFrequency="0.06 0.09"
+          baseFrequency="0.2 0.26"
           octaves={2}
-          scale={9}
-          freqValues="0.06 0.09; 0.07 0.11; 0.05 0.08; 0.06 0.09"
+          scale={5}
+          freqValues="0.2 0.26; 0.24 0.31; 0.17 0.23; 0.2 0.26"
           seedValues="5;1;8;3;9;5"
-          seedDur="0.8s"
+          seedDur="0.7s"
         />
       </defs>
     </svg>
