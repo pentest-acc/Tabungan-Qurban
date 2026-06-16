@@ -256,18 +256,18 @@
    inset kecil + skala perpindahan kecil = api ramping & natural (tidak membludak). */
 .avatar-frame__fire {
   position: absolute;
-  inset: -6%;
+  inset: -5%;
   z-index: 1;
   border-radius: 9999px;
   pointer-events: none;
   background: radial-gradient(
     closest-side,
-    transparent 68%,
-    rgba(255, 255, 255, 0.92) 74%,
-    #fef08a 78%,
-    #fb923c 84%,
-    #ef4444 90%,
-    #b91c1c 96%,
+    transparent 70%,
+    rgba(255, 255, 255, 0.92) 76%,
+    #fef08a 80%,
+    #fb923c 86%,
+    #ef4444 92%,
+    #b91c1c 97%,
     transparent 100%
   );
   filter: url(#api-fire-lg);
@@ -277,14 +277,14 @@
 .avatar-frame__fire::before {
   content: '';
   position: absolute;
-  inset: -2%;
+  inset: -1.5%;
   border-radius: inherit;
   background: radial-gradient(
     closest-side,
-    transparent 66%,
-    rgba(255, 237, 170, 0.8) 74%,
-    #f97316 85%,
-    #dc2626 94%,
+    transparent 68%,
+    rgba(255, 237, 170, 0.8) 77%,
+    #f97316 88%,
+    #dc2626 95%,
     transparent 100%
   );
   filter: url(#api-fire-lg2);
@@ -484,59 +484,82 @@
   0%, 100% { background-position: 0% 0%; }
   50% { background-position: 100% 100%; }
 }
-/* Teks "WARNING" — merah, redup, dengan efek glitch (pecahan RGB + jitter). */
-.avatar-frame__warning {
+/* "WARNING" ala bingkai Musik: huruf melayang naik BERURUTAN (W,A,R,N,I,N,G),
+   tetap ber-glitch; setelah huruf terakhir, kata UTUH muncul di tengah foto lalu
+   hilang. Semua elemen berbagi periode 6s agar tersinkron & berulang otomatis. */
+.avatar-frame__warn {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+.avatar-frame__warn-letter {
   position: absolute;
   left: 50%;
-  bottom: -16%;
-  z-index: 5;
-  transform: translateX(-50%);
-  font-size: calc(var(--frame-size, 40px) * 0.15);
-  font-weight: 800;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  top: 50%;
+  font-size: calc(var(--frame-size, 40px) * 0.28);
+  font-weight: 900;
+  color: #ef4444;
+  opacity: 0;
+  text-shadow: 1.5px 0 #7f1d1d, -1.5px 0 #fecaca, 0 0 7px rgba(239, 68, 68, 0.85);
+  animation: warn-float 6s linear infinite;
+}
+.wl-0 { animation-delay: 0s; }
+.wl-1 { animation-delay: 0.5s; }
+.wl-2 { animation-delay: 1s; }
+.wl-3 { animation-delay: 1.5s; }
+.wl-4 { animation-delay: 2s; }
+.wl-5 { animation-delay: 2.5s; }
+.wl-6 { animation-delay: 3s; }
+/* Melayang naik dari bawah-tengah + jitter/skew glitch, lalu memudar. */
+@keyframes warn-float {
+  0% { opacity: 0; transform: translate(-50%, 70%) scale(0.6) skewX(0deg); }
+  3% { opacity: 1; transform: translate(-46%, 45%) scale(0.9) skewX(-7deg); }
+  8% { transform: translate(-55%, 0%) scale(1.05) skewX(6deg); }
+  13% { opacity: 1; transform: translate(-48%, -70%) scale(1.05) skewX(-4deg); }
+  17% { opacity: 0; transform: translate(-50%, -150%) scale(1.1) skewX(0deg); }
+  100% { opacity: 0; transform: translate(-50%, -150%) scale(1.1); }
+}
+/* Kata utuh "WARNING" di TENGAH foto (muncul setelah huruf G), dengan glitch RGB. */
+.avatar-frame__warn-full {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: calc(var(--frame-size, 40px) * 0.2);
+  font-weight: 900;
+  letter-spacing: 0.1em;
   white-space: nowrap;
   color: #ef4444;
-  pointer-events: none;
-  text-shadow: 0 0 4px rgba(239, 68, 68, 0.85);
-  animation: warning-flicker 2.6s steps(1, end) infinite;
+  opacity: 0;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+  animation: warn-full 6s steps(1, end) infinite;
 }
-.avatar-frame__warning::before,
-.avatar-frame__warning::after {
+.avatar-frame__warn-full::before,
+.avatar-frame__warn-full::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
 }
-.avatar-frame__warning::before {
-  color: #991b1b;
-  animation: warning-glitch1 2s steps(2, end) infinite;
+.avatar-frame__warn-full::before { color: #7f1d1d; animation: warn-g1 0.5s steps(2, end) infinite; }
+.avatar-frame__warn-full::after { color: #fecaca; animation: warn-g2 0.43s steps(2, end) infinite; }
+@keyframes warn-full {
+  0%, 66% { opacity: 0; }
+  69% { opacity: 0.95; }
+  71% { opacity: 0.4; }
+  74% { opacity: 1; }
+  85% { opacity: 0.85; }
+  90%, 100% { opacity: 0; }
 }
-.avatar-frame__warning::after {
-  color: #fca5a5;
-  animation: warning-glitch2 1.7s steps(2, end) infinite;
+@keyframes warn-g1 {
+  0%, 100% { clip-path: inset(0 0 68% 0); transform: translateX(1.6px); }
+  50% { clip-path: inset(48% 0 18% 0); transform: translateX(-1.6px); }
 }
-@keyframes warning-flicker {
-  0%, 100% { opacity: 0.5; }
-  47% { opacity: 0.5; }
-  50% { opacity: 0.9; }
-  53% { opacity: 0.35; }
-  72% { opacity: 0.75; }
-  74% { opacity: 0.45; }
-}
-@keyframes warning-glitch1 {
-  0%, 100% { clip-path: inset(0 0 82% 0); transform: translateX(0); }
-  20% { clip-path: inset(38% 0 30% 0); transform: translateX(2px); }
-  40% { clip-path: inset(70% 0 6% 0); transform: translateX(-2px); }
-  60% { clip-path: inset(18% 0 56% 0); transform: translateX(1px); }
-  80% { clip-path: inset(55% 0 20% 0); transform: translateX(-1px); }
-}
-@keyframes warning-glitch2 {
-  0%, 100% { clip-path: inset(60% 0 10% 0); transform: translateX(0); }
-  25% { clip-path: inset(8% 0 72% 0); transform: translateX(-2px); }
-  55% { clip-path: inset(45% 0 26% 0); transform: translateX(2px); }
-  85% { clip-path: inset(75% 0 5% 0); transform: translateX(1px); }
+@keyframes warn-g2 {
+  0%, 100% { clip-path: inset(58% 0 8% 0); transform: translateX(-1.6px); }
+  50% { clip-path: inset(20% 0 54% 0); transform: translateX(1.6px); }
 }
 
 /* ----- KOSMIK (Cosmic): cincin ungu galaksi + bintang berkelip ----- */
