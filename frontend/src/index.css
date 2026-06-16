@@ -256,18 +256,18 @@
    inset kecil + skala perpindahan kecil = api ramping & natural (tidak membludak). */
 .avatar-frame__fire {
   position: absolute;
-  inset: -8%;
+  inset: -6%;
   z-index: 1;
   border-radius: 9999px;
   pointer-events: none;
   background: radial-gradient(
     closest-side,
-    transparent 66%,
-    rgba(255, 255, 255, 0.92) 72%,
-    #fef08a 76%,
-    #fb923c 82%,
-    #ef4444 89%,
-    #b91c1c 95%,
+    transparent 68%,
+    rgba(255, 255, 255, 0.92) 74%,
+    #fef08a 78%,
+    #fb923c 84%,
+    #ef4444 90%,
+    #b91c1c 96%,
     transparent 100%
   );
   filter: url(#api-fire-lg);
@@ -277,14 +277,14 @@
 .avatar-frame__fire::before {
   content: '';
   position: absolute;
-  inset: -3%;
+  inset: -2%;
   border-radius: inherit;
   background: radial-gradient(
     closest-side,
-    transparent 64%,
-    rgba(255, 237, 170, 0.8) 72%,
-    #f97316 84%,
-    #dc2626 93%,
+    transparent 66%,
+    rgba(255, 237, 170, 0.8) 74%,
+    #f97316 85%,
+    #dc2626 94%,
     transparent 100%
   );
   filter: url(#api-fire-lg2);
@@ -460,28 +460,83 @@
 .avatar-frame__note--3 { --nx: calc(var(--frame-size, 40px) * -0.18); --nr: 12deg; color: #22d3ee; animation-delay: 1.3s; }
 .avatar-frame__note--4 { --nx: calc(var(--frame-size, 40px) * 0.26); --nr: -14deg; color: #6366f1; animation-delay: 1.95s; }
 
-/* ----- AURORA: cincin lembut mengalir + tirai cahaya ----- */
-.avatar-frame--aurora .avatar-frame__ring::before {
-  background: conic-gradient(from 0deg, #6ee7b7, #22d3ee, #818cf8, #a855f7, #34d399, #6ee7b7);
+/* ----- BLOODY (Merah Berdarah): animasi sama seperti aurora, warna merah darah
+   + teks "WARNING" merah redup yang glitch di bawah-tengah bingkai ----- */
+.avatar-frame--bloody .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #450a0a, #dc2626, #ef4444, #7f1d1d, #b91c1c, #450a0a);
   animation: frame-spin 7s linear infinite;
 }
-.avatar-frame--aurora .avatar-frame__glow { animation: glow-aurora 4s ease-in-out infinite; }
-@keyframes glow-aurora {
-  0%, 100% { box-shadow: 0 0 8px 2px rgba(52, 211, 153, 0.45); }
-  50% { box-shadow: 0 0 17px 5px rgba(129, 140, 248, 0.65); }
+.avatar-frame--bloody .avatar-frame__glow { animation: glow-bloody 4s ease-in-out infinite; }
+@keyframes glow-bloody {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(220, 38, 38, 0.5); }
+  50% { box-shadow: 0 0 18px 5px rgba(127, 29, 29, 0.8); }
 }
-.avatar-frame--aurora .avatar-frame__fx::before {
+.avatar-frame--bloody .avatar-frame__fx::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(130deg, transparent 28%, rgba(110, 231, 183, 0.4) 50%, transparent 72%);
+  background: linear-gradient(130deg, transparent 28%, rgba(220, 38, 38, 0.45) 50%, transparent 72%);
   background-size: 220% 220%;
-  animation: aurora-drift 5s ease-in-out infinite;
+  animation: bloody-drift 5s ease-in-out infinite;
 }
-@keyframes aurora-drift {
+@keyframes bloody-drift {
   0%, 100% { background-position: 0% 0%; }
   50% { background-position: 100% 100%; }
+}
+/* Teks "WARNING" — merah, redup, dengan efek glitch (pecahan RGB + jitter). */
+.avatar-frame__warning {
+  position: absolute;
+  left: 50%;
+  bottom: -16%;
+  z-index: 5;
+  transform: translateX(-50%);
+  font-size: calc(var(--frame-size, 40px) * 0.15);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #ef4444;
+  pointer-events: none;
+  text-shadow: 0 0 4px rgba(239, 68, 68, 0.85);
+  animation: warning-flicker 2.6s steps(1, end) infinite;
+}
+.avatar-frame__warning::before,
+.avatar-frame__warning::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+.avatar-frame__warning::before {
+  color: #991b1b;
+  animation: warning-glitch1 2s steps(2, end) infinite;
+}
+.avatar-frame__warning::after {
+  color: #fca5a5;
+  animation: warning-glitch2 1.7s steps(2, end) infinite;
+}
+@keyframes warning-flicker {
+  0%, 100% { opacity: 0.5; }
+  47% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+  53% { opacity: 0.35; }
+  72% { opacity: 0.75; }
+  74% { opacity: 0.45; }
+}
+@keyframes warning-glitch1 {
+  0%, 100% { clip-path: inset(0 0 82% 0); transform: translateX(0); }
+  20% { clip-path: inset(38% 0 30% 0); transform: translateX(2px); }
+  40% { clip-path: inset(70% 0 6% 0); transform: translateX(-2px); }
+  60% { clip-path: inset(18% 0 56% 0); transform: translateX(1px); }
+  80% { clip-path: inset(55% 0 20% 0); transform: translateX(-1px); }
+}
+@keyframes warning-glitch2 {
+  0%, 100% { clip-path: inset(60% 0 10% 0); transform: translateX(0); }
+  25% { clip-path: inset(8% 0 72% 0); transform: translateX(-2px); }
+  55% { clip-path: inset(45% 0 26% 0); transform: translateX(2px); }
+  85% { clip-path: inset(75% 0 5% 0); transform: translateX(1px); }
 }
 
 /* ----- KOSMIK (Cosmic): cincin ungu galaksi + bintang berkelip ----- */

@@ -35,38 +35,38 @@ export default function FireFilterDefs() {
         {/* Avatar besar — frekuensi tinggi (lidah halus) + skala kecil (ramping) */}
         <FireFilter
           id="api-fire-lg"
-          baseFrequency="0.13 0.15"
+          baseFrequency="0.14 0.16"
           octaves={3}
-          scale={7}
-          freqValues="0.13 0.15; 0.15 0.19; 0.11 0.13; 0.13 0.15"
+          scale={5}
+          freqValues="0.14 0.16; 0.16 0.2; 0.12 0.14; 0.14 0.16"
           seedValues="2;7;4;9;1;6;2"
           seedDur="0.9s"
         />
         <FireFilter
           id="api-fire-lg2"
-          baseFrequency="0.11 0.14"
+          baseFrequency="0.12 0.15"
           octaves={3}
-          scale={9}
-          freqValues="0.11 0.14; 0.13 0.18; 0.09 0.12; 0.11 0.14"
+          scale={7}
+          freqValues="0.12 0.15; 0.14 0.19; 0.1 0.13; 0.12 0.15"
           seedValues="5;1;8;3;9;5"
           seedDur="0.75s"
         />
         {/* Avatar kecil */}
         <FireFilter
           id="api-fire-sm"
-          baseFrequency="0.22 0.25"
+          baseFrequency="0.24 0.27"
           octaves={2}
-          scale={4}
-          freqValues="0.22 0.25; 0.25 0.3; 0.19 0.22; 0.22 0.25"
+          scale={3}
+          freqValues="0.24 0.27; 0.27 0.32; 0.21 0.24; 0.24 0.27"
           seedValues="2;7;4;9;1;6;2"
           seedDur="0.85s"
         />
         <FireFilter
           id="api-fire-sm2"
-          baseFrequency="0.2 0.26"
+          baseFrequency="0.22 0.28"
           octaves={2}
-          scale={5}
-          freqValues="0.2 0.26; 0.24 0.31; 0.17 0.23; 0.2 0.26"
+          scale={4}
+          freqValues="0.22 0.28; 0.26 0.33; 0.19 0.25; 0.22 0.28"
           seedValues="5;1;8;3;9;5"
           seedDur="0.7s"
         />
