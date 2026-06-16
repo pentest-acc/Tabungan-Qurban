@@ -8,7 +8,7 @@ export const BORDER_PROFIL = [
   { key: 'air', label: 'Air' },
   { key: 'emas', label: 'Emas' },
   { key: 'musik', label: 'Musik' },
-  { key: 'aurora', label: 'Aurora' },
+  { key: 'bloody', label: 'Bloody' },
   { key: 'kosmik', label: 'Kosmik' },
 ];
 

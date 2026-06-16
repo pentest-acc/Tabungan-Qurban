@@ -41,6 +41,13 @@ export default function Avatar({
         </>
       )}
 
+      {/* Bloody: teks WARNING merah yang glitch & redup di bawah-tengah bingkai */}
+      {border === 'bloody' && size >= 50 && (
+        <span className="avatar-frame__warning" data-text="WARNING" aria-hidden="true">
+          WARNING
+        </span>
+      )}
+
       {/* Musik: alat musik (emitter) + not balok beragam melayang naik */}
       {border === 'musik' && (
         <>

@@ -12,7 +12,7 @@ const BORDER_VALID = [
   'air',
   'emas',
   'musik',
-  'aurora',
+  'bloody',
   'kosmik',
 ];
 
