@@ -33,14 +33,11 @@ export default function Avatar({
       <span className="avatar-frame__glow" aria-hidden="true" />
       <span className="avatar-frame__fx" aria-hidden="true" />
 
-      {/* Api: kobaran turbulen di seluruh tepi + obor tengkorak (Ghost Rider) */}
+      {/* Api: kerah api turbulen tipis di seluruh tepi + cahaya bara pada foto */}
       {border === 'api' && (
         <>
           <span className="avatar-frame__fire" aria-hidden="true" />
-          <span className="avatar-frame__torch" aria-hidden="true">
-            <span className="avatar-frame__torch-fire" aria-hidden="true" />
-            <span className="avatar-frame__skull" aria-hidden="true">💀</span>
-          </span>
+          <span className="avatar-frame__emberlight" aria-hidden="true" />
         </>
       )}
 

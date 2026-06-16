@@ -242,126 +242,82 @@
 /* ----- Tanpa bingkai: cincin tipis netral ----- */
 .avatar-frame--none .avatar-frame__inner { inset: 5%; }
 
-/* ----- API (Fire): tepi benar-benar terbakar (turbulensi SVG) + tengkorak ----- */
+/* ----- API (Fire): kerah api tipis natural memeluk tepi + foto tersinari ----- */
 /* Cincin dasar gelap membara agar lidah api terang menonjol di atasnya. */
 .avatar-frame--api .avatar-frame__ring::before {
   background: conic-gradient(from 0deg, #7c2d12, #b91c1c, #ea580c, #7c2d12, #9a3412, #7c2d12);
-  animation: frame-spin 5s linear infinite;
+  animation: frame-spin 6s linear infinite;
 }
 /* Glow cahaya dihilangkan sepenuhnya. */
 .avatar-frame--api .avatar-frame__glow { animation: none; box-shadow: none; }
 
-/* Kobaran api di SELURUH tepi. Pita api (putih-panas -> kuning -> oranye ->
-   merah) dipecah menjadi lidah-lidah api oleh filter turbulensi SVG sehingga
-   tampak menyala & menari seperti api sungguhan. */
+/* Kobaran api TIPIS yang memeluk tepi. Pita api (putih-panas -> kuning ->
+   oranye -> merah) dipecah jadi lidah api organik oleh filter turbulensi SVG.
+   inset kecil + skala perpindahan kecil = api ramping & natural (tidak membludak). */
 .avatar-frame__fire {
   position: absolute;
-  inset: -20%;
+  inset: -8%;
   z-index: 1;
   border-radius: 9999px;
   pointer-events: none;
   background: radial-gradient(
     closest-side,
-    transparent 54%,
-    rgba(255, 255, 255, 0.92) 60%,
-    #fef08a 64%,
-    #fb923c 71%,
-    #ef4444 79%,
-    #b91c1c 88%,
-    transparent 99%
+    transparent 66%,
+    rgba(255, 255, 255, 0.92) 72%,
+    #fef08a 76%,
+    #fb923c 82%,
+    #ef4444 89%,
+    #b91c1c 95%,
+    transparent 100%
   );
   filter: url(#api-fire-lg);
-  animation: fire-breathe 0.6s ease-in-out infinite;
+  animation: fire-breathe 0.5s ease-in-out infinite;
 }
-/* Lapis kedua: lidah api lebih tinggi & jarang untuk menambah kedalaman. */
+/* Lapis kedua: lidah api sedikit lebih tinggi untuk kedalaman. */
 .avatar-frame__fire::before {
   content: '';
   position: absolute;
-  inset: -4%;
+  inset: -3%;
   border-radius: inherit;
   background: radial-gradient(
     closest-side,
-    transparent 56%,
-    rgba(255, 237, 170, 0.85) 63%,
-    #f97316 75%,
-    #dc2626 85%,
-    transparent 98%
+    transparent 64%,
+    rgba(255, 237, 170, 0.8) 72%,
+    #f97316 84%,
+    #dc2626 93%,
+    transparent 100%
   );
   filter: url(#api-fire-lg2);
-  animation: fire-breathe 0.45s ease-in-out infinite reverse;
+  animation: fire-breathe 0.4s ease-in-out infinite reverse;
 }
 @keyframes fire-breathe {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.035); }
+  50% { transform: scale(1.025); }
 }
 /* Pemilihan skala filter sesuai ukuran avatar (skala perpindahan SVG = px tetap) */
 .avatar-frame--fire-sm .avatar-frame__fire { filter: url(#api-fire-sm); }
 .avatar-frame--fire-sm .avatar-frame__fire::before { filter: url(#api-fire-sm2); }
 
-/* Bara api kecil yang naik (melengkapi kobaran). */
-.avatar-frame--api .avatar-frame__fx::before {
-  content: '';
+/* Cahaya bara: api menyinari TEPI DALAM foto (blending screen) agar foto tampak
+   benar-benar dikelilingi & terkena cahaya api — bukan tertempel kaku. */
+.avatar-frame__emberlight {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at 32% 90%, rgba(253, 224, 71, 0.95) 0 3.5%, transparent 4.5%),
-    radial-gradient(circle at 60% 94%, rgba(251, 146, 60, 0.95) 0 3%, transparent 4%),
-    radial-gradient(circle at 74% 88%, rgba(254, 215, 170, 0.95) 0 2.5%, transparent 3.5%);
-  animation: api-embers 1.3s linear infinite;
-}
-@keyframes api-embers {
-  0% { transform: translateY(15%); opacity: 0; }
-  25% { opacity: 1; }
-  100% { transform: translateY(-65%); opacity: 0; }
-}
-
-/* Obor tengkorak menyala di atas-tengah (ala Ghost Rider) — kecil & menyatu. */
-.avatar-frame__torch {
-  position: absolute;
-  left: 50%;
-  top: -15%;
-  z-index: 5;
-  transform: translateX(-50%);
-  width: calc(var(--frame-size, 40px) * 0.5);
-  height: calc(var(--frame-size, 40px) * 0.56);
+  inset: 8%;
+  z-index: 3;
+  border-radius: 9999px;
   pointer-events: none;
-}
-/* Api yang berkobar membungkus tengkorak (turbulensi, lidah tinggi). */
-.avatar-frame__torch-fire {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
-  width: 130%;
-  height: 145%;
   background: radial-gradient(
-    ellipse at 50% 82%,
-    rgba(255, 255, 255, 0.95) 0%,
-    #fef08a 18%,
-    #fb923c 40%,
-    #ef4444 60%,
-    rgba(153, 27, 27, 0.5) 76%,
-    transparent 86%
+    closest-side,
+    transparent 50%,
+    rgba(249, 115, 22, 0.35) 80%,
+    rgba(239, 68, 68, 0.6) 100%
   );
-  filter: url(#api-fire-sm2);
-  animation: fire-breathe 0.4s ease-in-out infinite;
+  mix-blend-mode: screen;
+  animation: ember-pulse 0.45s ease-in-out infinite;
 }
-.avatar-frame--fire-sm .avatar-frame__torch-fire { filter: url(#api-fire-sm); }
-/* Tengkorak gosong (lebih kecil & gelap) yang muncul dari dalam api. */
-.avatar-frame__skull {
-  position: absolute;
-  left: 50%;
-  bottom: 6%;
-  transform: translateX(-50%);
-  font-size: calc(var(--frame-size, 40px) * 0.3);
-  line-height: 1;
-  filter: brightness(0.7) contrast(1.2) drop-shadow(0 1px 2px #7c2d12);
-  animation: skull-glow 0.5s ease-in-out infinite;
-}
-@keyframes skull-glow {
-  0%, 100% { filter: brightness(0.68) contrast(1.2) drop-shadow(0 1px 2px #7c2d12); }
-  50% { filter: brightness(0.92) contrast(1.25) drop-shadow(0 -1px 3px #f97316); }
+@keyframes ember-pulse {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
 }
 
 /* ----- PETIR (Lightning): cincin listrik + kilatan acak ----- */
