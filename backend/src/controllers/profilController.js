@@ -3,17 +3,17 @@ const { uploadMedia, isConfigured } = require('../config/cloudinary');
 const { simpanMediaLokal } = require('../utils/localStorage');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
-// Daftar border yang diizinkan — HARUS sinkron dengan katalog di frontend
-// (frontend/src/constants/borderProfil.js).
+// Bingkai/frame profil yang diizinkan — HARUS sinkron dengan katalog di
+// frontend (frontend/src/constants/borderProfil.js).
 const BORDER_VALID = [
   'none',
-  'emerald',
-  'rainbow',
-  'gold',
-  'neon',
-  'fire',
+  'api',
+  'petir',
+  'air',
+  'emas',
+  'pelangi',
   'aurora',
-  'royal',
+  'kosmik',
 ];
 
 const idPenggunaDari = (req) => (req.role === 'jamaah' ? req.user.id_jamaah : req.user.id_admin);

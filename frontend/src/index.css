@@ -196,106 +196,228 @@
   @apply bg-gradient-to-r from-primary-600 via-emerald-500 to-teal-500 bg-clip-text text-transparent;
 }
 
-/* ===== Avatar dengan border beranimasi (ala Discord) ===== */
-.avatar-ring {
-  box-sizing: border-box;
+/* ===== Bingkai (frame) profil beranimasi ala Discord / Mobile Legends =====
+   Struktur berlapis pada komponen Avatar:
+   .avatar-frame  > __ring (cincin berputar) + __glow (cahaya tema)
+                    + __fx (partikel/kilatan/riak) + __inner (media)        */
+.avatar-frame {
+  position: relative;
   display: inline-block;
   flex-shrink: 0;
-  padding: 3px;
+  box-sizing: border-box;
   border-radius: 9999px;
-  background: #cbd5e1;
+  isolation: isolate;
 }
-.dark .avatar-ring {
-  background: #475569;
-}
-.avatar-ring__inner {
-  width: 100%;
-  height: 100%;
+.avatar-frame__inner {
+  position: absolute;
+  inset: 8%;
+  z-index: 2;
   border-radius: 9999px;
   overflow: hidden;
   background: #fff;
 }
-.dark .avatar-ring__inner {
-  background: #0f172a;
+.dark .avatar-frame__inner { background: #0f172a; }
+.avatar-frame__ring,
+.avatar-frame__glow,
+.avatar-frame__fx {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  pointer-events: none;
 }
+.avatar-frame__ring { z-index: 0; overflow: hidden; }
+.avatar-frame__glow { z-index: 1; }
+.avatar-frame__fx { z-index: 3; overflow: hidden; }
 
-/* Aliran warna untuk border bergradien */
-@keyframes avatar-flow {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.avatar-ring--none {
+/* Cincin dasar (statis abu-abu) — di-override tiap tema */
+.avatar-frame__ring::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
   background: #cbd5e1;
 }
-.dark .avatar-ring--none {
-  background: #475569;
+.dark .avatar-frame__ring::before { background: #475569; }
+@keyframes frame-spin { to { transform: rotate(1turn); } }
+
+/* ----- Tanpa bingkai: cincin tipis netral ----- */
+.avatar-frame--none .avatar-frame__inner { inset: 5%; }
+
+/* ----- API (Fire): cincin api berputar + bara naik + nyala berkedip ----- */
+.avatar-frame--api .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #fde68a, #fb923c, #ef4444, #b91c1c, #fb923c, #fde68a);
+  animation: frame-spin 3s linear infinite;
+}
+.avatar-frame--api .avatar-frame__glow { animation: glow-api 0.5s ease-in-out infinite alternate; }
+@keyframes glow-api {
+  from { box-shadow: 0 0 6px 1px rgba(249, 115, 22, 0.5), 0 0 12px 3px rgba(239, 68, 68, 0.25); }
+  to { box-shadow: 0 0 12px 3px rgba(249, 115, 22, 0.9), 0 0 24px 7px rgba(239, 68, 68, 0.5); }
+}
+.avatar-frame--api .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 30% 92%, rgba(253, 224, 71, 0.95) 0 5%, transparent 6%),
+    radial-gradient(circle at 52% 96%, rgba(251, 146, 60, 0.95) 0 4%, transparent 5%),
+    radial-gradient(circle at 70% 90%, rgba(254, 215, 170, 0.95) 0 3.5%, transparent 4.5%),
+    radial-gradient(circle at 42% 88%, rgba(252, 165, 165, 0.9) 0 3%, transparent 4%);
+  animation: api-embers 1.2s linear infinite;
+}
+@keyframes api-embers {
+  0% { transform: translateY(18%); opacity: 0; }
+  25% { opacity: 1; }
+  100% { transform: translateY(-62%); opacity: 0; }
 }
 
-.avatar-ring--emerald {
-  background: linear-gradient(135deg, #34d399, #10b981, #059669);
-  animation: avatar-glow-emerald 1.8s ease-in-out infinite;
+/* ----- PETIR (Lightning): cincin listrik + kilatan acak ----- */
+.avatar-frame--petir .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #a78bfa, #22d3ee, #ffffff, #3b82f6, #a78bfa);
+  animation: frame-spin 2s linear infinite;
 }
-@keyframes avatar-glow-emerald {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-  50% { box-shadow: 0 0 12px 2px rgba(16, 185, 129, 0.65); }
+.avatar-frame--petir .avatar-frame__glow { animation: glow-petir 1.7s steps(1, end) infinite; }
+@keyframes glow-petir {
+  0%, 6%, 9%, 51%, 55%, 100% { box-shadow: 0 0 6px 1px rgba(59, 130, 246, 0.45); }
+  8%, 53% { box-shadow: 0 0 18px 6px rgba(165, 243, 252, 0.95), 0 0 30px 10px rgba(99, 102, 241, 0.6); }
 }
-
-.avatar-ring--rainbow {
-  background-image: linear-gradient(90deg, #f43f5e, #f59e0b, #eab308, #10b981, #3b82f6, #a855f7, #f43f5e);
-  background-size: 200% 100%;
-  animation: avatar-flow 4s linear infinite;
+.avatar-frame--petir .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(120deg, transparent 42%, rgba(255, 255, 255, 0.9) 49%, rgba(165, 243, 252, 0.95) 51%, transparent 58%);
+  opacity: 0;
+  animation: petir-zap 1.7s steps(1, end) infinite;
 }
-
-.avatar-ring--gold {
-  background-image: linear-gradient(90deg, #fde68a, #f59e0b, #fbbf24, #b45309, #fde68a);
-  background-size: 200% 100%;
-  animation: avatar-flow 3.5s linear infinite, avatar-glow-gold 2s ease-in-out infinite;
-}
-@keyframes avatar-glow-gold {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
-  50% { box-shadow: 0 0 12px 2px rgba(245, 158, 11, 0.6); }
-}
-
-.avatar-ring--neon {
-  background-image: linear-gradient(90deg, #22d3ee, #3b82f6, #06b6d4, #22d3ee);
-  background-size: 200% 100%;
-  animation: avatar-flow 3s linear infinite, avatar-glow-neon 1.6s ease-in-out infinite;
-}
-@keyframes avatar-glow-neon {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 238, 0); }
-  50% { box-shadow: 0 0 14px 3px rgba(34, 211, 238, 0.7); }
+@keyframes petir-zap {
+  0%, 6%, 100% { opacity: 0; }
+  8% { opacity: 1; }
+  10%, 50% { opacity: 0; }
+  53% { opacity: 1; }
+  56% { opacity: 0; }
 }
 
-.avatar-ring--fire {
-  background-image: linear-gradient(90deg, #fca5a5, #ef4444, #f97316, #fbbf24, #ef4444);
-  background-size: 200% 100%;
-  animation: avatar-flow 2.5s linear infinite, avatar-glow-fire 1.5s ease-in-out infinite;
+/* ----- AIR (Water): cincin air berputar pelan + gelombang + riak ----- */
+.avatar-frame--air .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #67e8f9, #3b82f6, #2dd4bf, #0ea5e9, #67e8f9);
+  animation: frame-spin 6s linear infinite;
 }
-@keyframes avatar-glow-fire {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
-  50% { box-shadow: 0 0 13px 2px rgba(249, 115, 22, 0.65); }
+.avatar-frame--air .avatar-frame__glow { animation: glow-air 2.6s ease-in-out infinite; }
+@keyframes glow-air {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(14, 165, 233, 0.4); }
+  50% { box-shadow: 0 0 15px 4px rgba(45, 212, 191, 0.7); }
+}
+.avatar-frame--air .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: 0;
+  height: 60%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(103, 232, 249, 0.55), transparent 70%);
+  animation: air-wave 3s ease-in-out infinite;
+}
+@keyframes air-wave {
+  0%, 100% { transform: translateY(8%) scaleX(1); opacity: 0.65; }
+  50% { transform: translateY(-6%) scaleX(1.12); opacity: 1; }
+}
+.avatar-frame--air .avatar-frame__fx::after {
+  content: '';
+  position: absolute;
+  inset: 28%;
+  border-radius: 9999px;
+  animation: air-ripple 2.8s ease-out infinite;
+}
+@keyframes air-ripple {
+  0% { box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.6); opacity: 1; }
+  100% { box-shadow: 0 0 0 16px rgba(103, 232, 249, 0); opacity: 0; }
 }
 
-.avatar-ring--aurora {
-  background-image: linear-gradient(90deg, #6ee7b7, #3b82f6, #a855f7, #22d3ee, #6ee7b7);
-  background-size: 200% 100%;
-  animation: avatar-flow 5s linear infinite;
+/* ----- EMAS (Gold): cincin emas mewah + kilau menyapu ----- */
+.avatar-frame--emas .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #fff7cc, #fde047, #f59e0b, #b45309, #fde047, #fff7cc);
+  animation: frame-spin 4s linear infinite;
+}
+.avatar-frame--emas .avatar-frame__glow { animation: glow-emas 2s ease-in-out infinite; }
+@keyframes glow-emas {
+  0%, 100% { box-shadow: 0 0 6px 1px rgba(245, 158, 11, 0.4); }
+  50% { box-shadow: 0 0 15px 4px rgba(253, 224, 71, 0.8); }
+}
+.avatar-frame--emas .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, 0.8) 50%, transparent 65%);
+  transform: translateX(-130%);
+  animation: emas-shine 2.8s ease-in-out infinite;
+}
+@keyframes emas-shine {
+  0% { transform: translateX(-130%); }
+  55%, 100% { transform: translateX(130%); }
 }
 
-.avatar-ring--royal {
-  background-image: linear-gradient(90deg, #a855f7, #6366f1, #7c3aed, #c084fc, #a855f7);
-  background-size: 200% 100%;
-  animation: avatar-flow 4s linear infinite, avatar-glow-royal 2s ease-in-out infinite;
+/* ----- PELANGI (Rainbow): cincin pelangi berputar cepat ----- */
+.avatar-frame--pelangi .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #f43f5e, #f59e0b, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #f43f5e);
+  animation: frame-spin 2.5s linear infinite;
 }
-@keyframes avatar-glow-royal {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
-  50% { box-shadow: 0 0 13px 2px rgba(124, 58, 237, 0.6); }
+.avatar-frame--pelangi .avatar-frame__glow { animation: glow-pelangi 3s linear infinite; }
+@keyframes glow-pelangi {
+  0% { box-shadow: 0 0 12px 2px rgba(244, 63, 94, 0.6); }
+  33% { box-shadow: 0 0 12px 2px rgba(34, 197, 94, 0.6); }
+  66% { box-shadow: 0 0 12px 2px rgba(59, 130, 246, 0.6); }
+  100% { box-shadow: 0 0 12px 2px rgba(244, 63, 94, 0.6); }
+}
+
+/* ----- AURORA: cincin lembut mengalir + tirai cahaya ----- */
+.avatar-frame--aurora .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #6ee7b7, #22d3ee, #818cf8, #a855f7, #34d399, #6ee7b7);
+  animation: frame-spin 7s linear infinite;
+}
+.avatar-frame--aurora .avatar-frame__glow { animation: glow-aurora 4s ease-in-out infinite; }
+@keyframes glow-aurora {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(52, 211, 153, 0.45); }
+  50% { box-shadow: 0 0 17px 5px rgba(129, 140, 248, 0.65); }
+}
+.avatar-frame--aurora .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(130deg, transparent 28%, rgba(110, 231, 183, 0.4) 50%, transparent 72%);
+  background-size: 220% 220%;
+  animation: aurora-drift 5s ease-in-out infinite;
+}
+@keyframes aurora-drift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* ----- KOSMIK (Cosmic): cincin ungu galaksi + bintang berkelip ----- */
+.avatar-frame--kosmik .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #312e81, #7c3aed, #c084fc, #6366f1, #312e81);
+  animation: frame-spin 5s linear infinite;
+}
+.avatar-frame--kosmik .avatar-frame__glow { animation: glow-kosmik 2.6s ease-in-out infinite; }
+@keyframes glow-kosmik {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(124, 58, 237, 0.5); }
+  50% { box-shadow: 0 0 17px 5px rgba(192, 132, 252, 0.7); }
+}
+.avatar-frame--kosmik .avatar-frame__fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 26% 30%, #fff 0 1.6%, transparent 2.2%),
+    radial-gradient(circle at 72% 24%, #fff 0 1.1%, transparent 1.7%),
+    radial-gradient(circle at 62% 74%, #fff 0 1.6%, transparent 2.2%),
+    radial-gradient(circle at 34% 68%, #fff 0 1.1%, transparent 1.7%),
+    radial-gradient(circle at 82% 60%, #fff 0 1%, transparent 1.5%);
+  animation: kosmik-twinkle 2.2s ease-in-out infinite;
+}
+@keyframes kosmik-twinkle {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
 }
