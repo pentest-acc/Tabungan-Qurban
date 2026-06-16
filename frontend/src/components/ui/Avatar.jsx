@@ -31,6 +31,14 @@ export default function Avatar({
       <span className="avatar-frame__glow" aria-hidden="true" />
       <span className="avatar-frame__fx" aria-hidden="true" />
 
+      {/* Api: kobaran menjilat di seluruh tepi + tengkorak menyala (Ghost Rider) */}
+      {border === 'api' && (
+        <>
+          <span className="avatar-frame__fire" aria-hidden="true" />
+          <span className="avatar-frame__skull" aria-hidden="true">💀</span>
+        </>
+      )}
+
       {/* Musik: alat musik (emitter) + not balok beragam melayang naik */}
       {border === 'musik' && (
         <>

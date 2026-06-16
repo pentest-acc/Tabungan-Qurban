@@ -242,16 +242,75 @@
 /* ----- Tanpa bingkai: cincin tipis netral ----- */
 .avatar-frame--none .avatar-frame__inner { inset: 5%; }
 
-/* ----- API (Fire): cincin api berputar + bara naik + nyala berkedip ----- */
+/* ----- API (Fire): seluruh tepi terbakar lidah api + tengkorak menyala ----- */
+/* Cincin dasar berwarna api (tanpa glow cahaya — diganti kobaran nyata). */
 .avatar-frame--api .avatar-frame__ring::before {
   background: conic-gradient(from 0deg, #fde68a, #fb923c, #ef4444, #b91c1c, #fb923c, #fde68a);
   animation: frame-spin 3s linear infinite;
 }
-.avatar-frame--api .avatar-frame__glow { animation: glow-api 0.5s ease-in-out infinite alternate; }
-@keyframes glow-api {
-  from { box-shadow: 0 0 6px 1px rgba(249, 115, 22, 0.5), 0 0 12px 3px rgba(239, 68, 68, 0.25); }
-  to { box-shadow: 0 0 12px 3px rgba(249, 115, 22, 0.9), 0 0 24px 7px rgba(239, 68, 68, 0.5); }
+/* Glow lama dihilangkan sepenuhnya untuk bingkai api. */
+.avatar-frame--api .avatar-frame__glow { animation: none; box-shadow: none; }
+
+/* Kobaran api yang menjilat di SETIAP sisi lingkaran (3 lapis: dasar + 2 lidah). */
+.avatar-frame__fire {
+  position: absolute;
+  inset: -15%;
+  z-index: 1;
+  border-radius: 9999px;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    transparent 50%,
+    rgba(254, 240, 138, 0.95) 57%,
+    rgba(251, 146, 60, 0.9) 65%,
+    rgba(239, 68, 68, 0.85) 73%,
+    rgba(185, 28, 28, 0.45) 82%,
+    transparent 92%
+  );
+  animation: fire-flicker 0.32s steps(3, end) infinite;
 }
+.avatar-frame__fire::before,
+.avatar-frame__fire::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  -webkit-mask: radial-gradient(closest-side, transparent 50%, #000 60%, #000 78%, transparent 100%);
+  mask: radial-gradient(closest-side, transparent 50%, #000 60%, #000 78%, transparent 100%);
+}
+/* Lidah api lapis 1 — putih-kuning, berputar searah jarum jam */
+.avatar-frame__fire::before {
+  background: repeating-conic-gradient(
+    from 0deg,
+    #fef08a 0deg 3deg,
+    #fb923c 3deg 7deg,
+    transparent 7deg 15deg
+  );
+  filter: blur(2px);
+  animation: fire-spin-cw 7s linear infinite, fire-flicker 0.28s steps(3, end) infinite;
+}
+/* Lidah api lapis 2 — oranye-merah, berputar berlawanan & lebih cepat */
+.avatar-frame__fire::after {
+  inset: -6%;
+  background: repeating-conic-gradient(
+    from 7deg,
+    #fdba74 0deg 2deg,
+    #ef4444 2deg 6deg,
+    transparent 6deg 13deg
+  );
+  filter: blur(2.5px);
+  animation: fire-spin-ccw 5.5s linear infinite, fire-flicker 0.22s steps(2, end) infinite;
+}
+@keyframes fire-spin-cw { to { transform: rotate(1turn); } }
+@keyframes fire-spin-ccw { to { transform: rotate(-1turn); } }
+@keyframes fire-flicker {
+  0%, 100% { opacity: 1; }
+  25% { opacity: 0.82; }
+  50% { opacity: 0.95; }
+  75% { opacity: 0.78; }
+}
+
+/* Bara api yang naik (dipertahankan, melengkapi kobaran). */
 .avatar-frame--api .avatar-frame__fx::before {
   content: '';
   position: absolute;
@@ -268,6 +327,48 @@
   0% { transform: translateY(18%); opacity: 0; }
   25% { opacity: 1; }
   100% { transform: translateY(-62%); opacity: 0; }
+}
+
+/* Tengkorak menyala di atas-tengah, ala Ghost Rider. */
+.avatar-frame__skull {
+  position: absolute;
+  left: 50%;
+  top: -24%;
+  z-index: 5;
+  transform: translateX(-50%);
+  font-size: calc(var(--frame-size, 40px) * 0.44);
+  line-height: 1;
+  pointer-events: none;
+  animation: skull-burn 0.26s steps(2, end) infinite, skull-bob 1.4s ease-in-out infinite;
+}
+/* Kobaran api yang membungkus tengkorak */
+.avatar-frame__skull::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -52%;
+  width: 115%;
+  height: 150%;
+  transform: translateX(-50%);
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 78%, #fef08a 0%, #fb923c 38%, #ef4444 62%, rgba(185, 28, 28, 0.5) 78%, transparent 86%);
+  border-radius: 50% 50% 48% 48% / 62% 62% 38% 38%;
+  filter: blur(1.5px);
+  animation: fire-flicker 0.26s steps(3, end) infinite;
+}
+@keyframes skull-burn {
+  0%, 100% {
+    text-shadow: 0 0 4px #fde047, 0 0 9px #fb923c, 0 -3px 11px #ef4444, 0 -7px 15px rgba(239, 68, 68, 0.7);
+    filter: brightness(1);
+  }
+  50% {
+    text-shadow: 0 0 6px #fef08a, 0 0 12px #fdba74, 0 -5px 15px #f87171, 0 -10px 20px rgba(239, 68, 68, 0.85);
+    filter: brightness(1.25);
+  }
+}
+@keyframes skull-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-9%); }
 }
 
 /* ----- PETIR (Lightning): cincin listrik + kilatan acak ----- */
