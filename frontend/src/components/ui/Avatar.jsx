@@ -41,10 +41,17 @@ export default function Avatar({
         </>
       )}
 
-      {/* Bloody: teks WARNING merah yang glitch & redup di bawah-tengah bingkai */}
+      {/* Bloody: huruf WARNING melayang naik berurutan, lalu kata utuh di tengah */}
       {border === 'bloody' && size >= 50 && (
-        <span className="avatar-frame__warning" data-text="WARNING" aria-hidden="true">
-          WARNING
+        <span className="avatar-frame__warn" aria-hidden="true">
+          {['W', 'A', 'R', 'N', 'I', 'N', 'G'].map((ch, i) => (
+            <span key={i} className={`avatar-frame__warn-letter wl-${i}`}>
+              {ch}
+            </span>
+          ))}
+          <span className="avatar-frame__warn-full" data-text="WARNING">
+            WARNING
+          </span>
         </span>
       )}
 
