@@ -52,6 +52,13 @@ export default function Avatar({
         </>
       )}
 
+      {/* Kosmik: komet jatuh dari kanan-atas ke kiri-bawah dengan ekor cahaya */}
+      {border === 'kosmik' && (
+        <span className="avatar-frame__sky" aria-hidden="true">
+          <span className="avatar-frame__comet" />
+        </span>
+      )}
+
       <div className="avatar-frame__inner">
         {mediaSrc ? (
           tipe === 'video' ? (
