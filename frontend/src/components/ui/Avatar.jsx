@@ -25,11 +25,33 @@ export default function Avatar({
   return (
     <div
       className={`avatar-frame avatar-frame--${border} ${className}`}
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, '--frame-size': `${size}px` }}
     >
       <span className="avatar-frame__ring" aria-hidden="true" />
       <span className="avatar-frame__glow" aria-hidden="true" />
       <span className="avatar-frame__fx" aria-hidden="true" />
+
+      {/* Musik: alat musik (emitter) + not balok beragam melayang naik */}
+      {border === 'musik' && (
+        <>
+          <span className="avatar-frame__note avatar-frame__note--1" aria-hidden="true">♪</span>
+          <span className="avatar-frame__note avatar-frame__note--2" aria-hidden="true">♫</span>
+          <span className="avatar-frame__note avatar-frame__note--3" aria-hidden="true">♬</span>
+          <span className="avatar-frame__note avatar-frame__note--4" aria-hidden="true">♩</span>
+          <span className="avatar-frame__instrument" aria-hidden="true">🎸</span>
+        </>
+      )}
+
+      {/* Air: tetesan air menetes jatuh ke bawah seperti keringat */}
+      {border === 'air' && (
+        <>
+          <span className="avatar-frame__drop avatar-frame__drop--1" aria-hidden="true" />
+          <span className="avatar-frame__drop avatar-frame__drop--2" aria-hidden="true" />
+          <span className="avatar-frame__drop avatar-frame__drop--3" aria-hidden="true" />
+          <span className="avatar-frame__drop avatar-frame__drop--4" aria-hidden="true" />
+        </>
+      )}
+
       <div className="avatar-frame__inner">
         {mediaSrc ? (
           tipe === 'video' ? (

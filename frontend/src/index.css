@@ -307,31 +307,30 @@
   0%, 100% { box-shadow: 0 0 6px 1px rgba(14, 165, 233, 0.4); }
   50% { box-shadow: 0 0 15px 4px rgba(45, 212, 191, 0.7); }
 }
-.avatar-frame--air .avatar-frame__fx::before {
-  content: '';
+/* Tetesan air menetes jatuh ke bawah (seperti keringat) */
+.avatar-frame__drop {
   position: absolute;
-  left: -20%;
-  right: -20%;
-  bottom: 0;
-  height: 60%;
-  background: radial-gradient(ellipse at 50% 100%, rgba(103, 232, 249, 0.55), transparent 70%);
-  animation: air-wave 3s ease-in-out infinite;
+  top: -4%;
+  z-index: 4;
+  width: calc(var(--frame-size, 40px) * 0.1);
+  height: calc(var(--frame-size, 40px) * 0.15);
+  background: radial-gradient(circle at 50% 32%, #e0f2fe, #38bdf8 55%, #0284c7);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 5px rgba(56, 189, 248, 0.8);
+  opacity: 0;
+  pointer-events: none;
+  animation: air-drip 2.3s ease-in infinite;
 }
-@keyframes air-wave {
-  0%, 100% { transform: translateY(8%) scaleX(1); opacity: 0.65; }
-  50% { transform: translateY(-6%) scaleX(1.12); opacity: 1; }
+@keyframes air-drip {
+  0% { transform: translateY(0) scaleY(0.7); opacity: 0; }
+  15% { opacity: 1; }
+  82% { opacity: 1; }
+  100% { transform: translateY(calc(var(--frame-size, 40px) * 1.05)) scaleY(1.45); opacity: 0; }
 }
-.avatar-frame--air .avatar-frame__fx::after {
-  content: '';
-  position: absolute;
-  inset: 28%;
-  border-radius: 9999px;
-  animation: air-ripple 2.8s ease-out infinite;
-}
-@keyframes air-ripple {
-  0% { box-shadow: 0 0 0 0 rgba(103, 232, 249, 0.6); opacity: 1; }
-  100% { box-shadow: 0 0 0 16px rgba(103, 232, 249, 0); opacity: 0; }
-}
+.avatar-frame__drop--1 { left: 22%; animation-delay: 0s; }
+.avatar-frame__drop--2 { left: 50%; animation-delay: 0.6s; }
+.avatar-frame__drop--3 { left: 73%; animation-delay: 1.15s; }
+.avatar-frame__drop--4 { left: 38%; animation-delay: 1.75s; }
 
 /* ----- EMAS (Gold): cincin emas mewah + kilau menyapu ----- */
 .avatar-frame--emas .avatar-frame__ring::before {
@@ -357,18 +356,59 @@
   55%, 100% { transform: translateX(130%); }
 }
 
-/* ----- PELANGI (Rainbow): cincin pelangi berputar cepat ----- */
-.avatar-frame--pelangi .avatar-frame__ring::before {
-  background: conic-gradient(from 0deg, #f43f5e, #f59e0b, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #f43f5e);
-  animation: frame-spin 2.5s linear infinite;
+/* ----- MUSIK (Music): cincin warna-warni + alat musik memancarkan not balok ----- */
+.avatar-frame--musik .avatar-frame__ring::before {
+  background: conic-gradient(from 0deg, #f472b6, #a855f7, #6366f1, #22d3ee, #f472b6);
+  animation: frame-spin 3.5s linear infinite;
 }
-.avatar-frame--pelangi .avatar-frame__glow { animation: glow-pelangi 3s linear infinite; }
-@keyframes glow-pelangi {
-  0% { box-shadow: 0 0 12px 2px rgba(244, 63, 94, 0.6); }
-  33% { box-shadow: 0 0 12px 2px rgba(34, 197, 94, 0.6); }
-  66% { box-shadow: 0 0 12px 2px rgba(59, 130, 246, 0.6); }
-  100% { box-shadow: 0 0 12px 2px rgba(244, 63, 94, 0.6); }
+.avatar-frame--musik .avatar-frame__glow { animation: glow-musik 1.1s ease-in-out infinite; }
+@keyframes glow-musik {
+  0%, 100% { box-shadow: 0 0 7px 1px rgba(168, 85, 247, 0.45); }
+  50% { box-shadow: 0 0 15px 4px rgba(244, 114, 182, 0.7); }
 }
+/* Alat musik (sumber) di bawah avatar, sedikit memantul */
+.avatar-frame__instrument {
+  position: absolute;
+  left: 50%;
+  bottom: -8%;
+  z-index: 4;
+  transform: translateX(-50%);
+  font-size: calc(var(--frame-size, 40px) * 0.3);
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px rgba(168, 85, 247, 0.6));
+  animation: musik-bob 1s ease-in-out infinite;
+}
+@keyframes musik-bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10%); }
+}
+/* Not balok beragam melayang naik (mirip bara pada bingkai api) */
+.avatar-frame__note {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  z-index: 4;
+  font-size: calc(var(--frame-size, 40px) * 0.26);
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+  animation: musik-rise 2.6s ease-in infinite;
+}
+@keyframes musik-rise {
+  0% { opacity: 0; transform: translate(-50%, 0) scale(0.5) rotate(0deg); }
+  18% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--nx, 0px)), calc(var(--frame-size, 40px) * -1.25)) scale(1.15)
+      rotate(var(--nr, 20deg));
+  }
+}
+.avatar-frame__note--1 { --nx: calc(var(--frame-size, 40px) * -0.45); --nr: -22deg; color: #f472b6; animation-delay: 0s; }
+.avatar-frame__note--2 { --nx: calc(var(--frame-size, 40px) * 0.4); --nr: 18deg; color: #a855f7; animation-delay: 0.65s; }
+.avatar-frame__note--3 { --nx: calc(var(--frame-size, 40px) * -0.18); --nr: 12deg; color: #22d3ee; animation-delay: 1.3s; }
+.avatar-frame__note--4 { --nx: calc(var(--frame-size, 40px) * 0.26); --nr: -14deg; color: #6366f1; animation-delay: 1.95s; }
 
 /* ----- AURORA: cincin lembut mengalir + tirai cahaya ----- */
 .avatar-frame--aurora .avatar-frame__ring::before {
