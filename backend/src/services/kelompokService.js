@@ -3,6 +3,7 @@ const SapiQurban = require('../models/SapiQurban');
 const TabunganQurban = require('../models/TabunganQurban');
 const DetailKelompok = require('../models/DetailKelompok');
 const Jamaah = require('../models/Jamaah');
+const ProfilPengguna = require('../models/ProfilPengguna');
 
 const KUOTA_MAKSIMAL = 7;
 
@@ -22,18 +23,23 @@ async function lengkapiSemuaKelompok(list) {
 
 // Daftar anggota kelompok beserta profil publik jamaah.
 // Informasi sensitif (no_telp, alamat, password) sengaja TIDAK disertakan —
-// sesama jamaah hanya boleh melihat nama, username, dan tanggal bergabung.
+// sesama jamaah hanya boleh melihat nama, username, foto/border profil, dan
+// tanggal bergabung. Foto & border profil bersifat publik (memang untuk dipajang).
 async function daftarAnggota(idKelompok) {
   const details = await DetailKelompok.find({ id_kelompok: idKelompok }).lean();
   return Promise.all(
     details.map(async (detail) => {
-      const jamaah = await Jamaah.findOne({ id_jamaah: detail.id_jamaah })
-        .select('id_jamaah nama_lengkap username')
-        .lean();
+      const [jamaah, profil] = await Promise.all([
+        Jamaah.findOne({ id_jamaah: detail.id_jamaah }).select('id_jamaah nama_lengkap username').lean(),
+        ProfilPengguna.findOne({ id_pengguna: detail.id_jamaah }).lean(),
+      ]);
       return {
         ...detail,
         nama_lengkap: jamaah?.nama_lengkap,
         jamaah,
+        foto_profil: profil?.foto_profil || '',
+        tipe_media: profil?.tipe_media || 'gambar',
+        border_profil: profil?.border_profil || 'none',
         bergabung_sejak: detail.createdAt,
       };
     })

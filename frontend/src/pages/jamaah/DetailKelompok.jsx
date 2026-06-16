@@ -7,13 +7,13 @@ import {
   ScaleIcon,
   BanknotesIcon,
 } from '@heroicons/react/24/outline';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
 import useFetch from '../../hooks/useFetch';
 import kelompokService from '../../services/kelompokService';
 import LoadingState from '../../components/ui/LoadingState';
 import ErrorState from '../../components/ui/ErrorState';
 import EmptyState from '../../components/ui/EmptyState';
 import Modal from '../../components/ui/Modal';
+import Avatar from '../../components/ui/Avatar';
 import Badge, { statusVariant } from '../../components/ui/Badge';
 import { formatRupiah, formatDate } from '../../utils/format';
 
@@ -127,12 +127,17 @@ export default function DetailKelompok() {
                     className="flex w-full items-center gap-3 rounded-lg bg-slate-50 px-3 py-2 text-left transition-colors hover:bg-primary-50 dark:bg-slate-800/60 dark:hover:bg-primary-900/30"
                     title="Lihat profil anggota"
                   >
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700 dark:bg-primary-900/40 dark:text-primary-300">
-                      {idx + 1}
-                    </span>
-                    <span className="text-sm font-medium">
+                    <Avatar
+                      src={member.foto_profil}
+                      tipe={member.tipe_media}
+                      border={member.border_profil}
+                      nama={member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
+                      size={44}
+                    />
+                    <span className="flex-1 text-sm font-medium">
                       {member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
                     </span>
+                    <span className="text-xs font-semibold text-slate-400">#{idx + 1}</span>
                   </button>
                 </li>
               ))}
@@ -151,8 +156,14 @@ export default function DetailKelompok() {
       >
         {anggotaDipilih && (
           <div className="flex flex-col items-center text-center">
-            <UserCircleIcon className="h-20 w-20 text-slate-300 dark:text-slate-600" />
-            <h3 className="mt-2 text-lg font-bold">
+            <Avatar
+              src={anggotaDipilih.foto_profil}
+              tipe={anggotaDipilih.tipe_media}
+              border={anggotaDipilih.border_profil}
+              nama={anggotaDipilih.nama_lengkap || anggotaDipilih.jamaah?.nama_lengkap}
+              size={104}
+            />
+            <h3 className="mt-3 text-lg font-bold">
               {anggotaDipilih.nama_lengkap || anggotaDipilih.jamaah?.nama_lengkap}
             </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400">

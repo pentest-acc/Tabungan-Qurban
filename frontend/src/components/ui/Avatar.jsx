@@ -1,9 +1,10 @@
 import { UserCircleIcon } from '@heroicons/react/24/solid';
 import { resolveMediaUrl } from '../../utils/media';
 
-// Avatar dengan border beranimasi ala Discord. Mendukung media gambar/GIF
-// (otomatis dari <img>) maupun video (autoplay, mute, loop). Jika tidak ada
-// media, menampilkan inisial nama, atau ikon default bila nama pun kosong.
+// Avatar dengan BINGKAI beranimasi ala Discord / Mobile Legends.
+// Struktur berlapis: cincin berputar (ring) + cahaya tema (glow) + efek
+// partikel/kilatan (fx) di atas, dengan media di tengah. Mendukung gambar/GIF
+// (<img>) maupun video (autoplay, mute, loop). Tanpa media → inisial, lalu ikon.
 function inisial(nama = '') {
   const bagian = nama.trim().split(/\s+/).filter(Boolean);
   if (!bagian.length) return '';
@@ -20,22 +21,19 @@ export default function Avatar({
 }) {
   const ini = inisial(nama);
   const mediaSrc = resolveMediaUrl(src);
+
   return (
     <div
-      className={`avatar-ring avatar-ring--${border} ${className}`}
+      className={`avatar-frame avatar-frame--${border} ${className}`}
       style={{ width: size, height: size }}
     >
-      <div className="avatar-ring__inner">
+      <span className="avatar-frame__ring" aria-hidden="true" />
+      <span className="avatar-frame__glow" aria-hidden="true" />
+      <span className="avatar-frame__fx" aria-hidden="true" />
+      <div className="avatar-frame__inner">
         {mediaSrc ? (
           tipe === 'video' ? (
-            <video
-              src={mediaSrc}
-              className="h-full w-full object-cover"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
+            <video src={mediaSrc} className="h-full w-full object-cover" autoPlay loop muted playsInline />
           ) : (
             <img src={mediaSrc} alt={nama || 'Avatar'} className="h-full w-full object-cover" />
           )
