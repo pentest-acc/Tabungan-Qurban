@@ -21,21 +21,26 @@ export default function Avatar({
 }) {
   const ini = inisial(nama);
   const mediaSrc = resolveMediaUrl(src);
+  // Bingkai api memilih skala filter turbulensi sesuai ukuran (px tetap di SVG).
+  const fireTier = border === 'api' ? (size > 64 ? ' avatar-frame--fire-lg' : ' avatar-frame--fire-sm') : '';
 
   return (
     <div
-      className={`avatar-frame avatar-frame--${border} ${className}`}
+      className={`avatar-frame avatar-frame--${border}${fireTier} ${className}`}
       style={{ width: size, height: size, '--frame-size': `${size}px` }}
     >
       <span className="avatar-frame__ring" aria-hidden="true" />
       <span className="avatar-frame__glow" aria-hidden="true" />
       <span className="avatar-frame__fx" aria-hidden="true" />
 
-      {/* Api: kobaran menjilat di seluruh tepi + tengkorak menyala (Ghost Rider) */}
+      {/* Api: kobaran turbulen di seluruh tepi + obor tengkorak (Ghost Rider) */}
       {border === 'api' && (
         <>
           <span className="avatar-frame__fire" aria-hidden="true" />
-          <span className="avatar-frame__skull" aria-hidden="true">💀</span>
+          <span className="avatar-frame__torch" aria-hidden="true">
+            <span className="avatar-frame__torch-fire" aria-hidden="true" />
+            <span className="avatar-frame__skull" aria-hidden="true">💀</span>
+          </span>
         </>
       )}
 
