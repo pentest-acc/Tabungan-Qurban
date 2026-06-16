@@ -484,56 +484,22 @@
   0%, 100% { background-position: 0% 0%; }
   50% { background-position: 100% 100%; }
 }
-/* "WARNING" ala bingkai Musik: huruf melayang naik BERURUTAN (W,A,R,N,I,N,G),
-   tetap ber-glitch; setelah huruf terakhir, kata UTUH muncul di tengah foto lalu
-   hilang. Semua elemen berbagi periode 6s agar tersinkron & berulang otomatis. */
-.avatar-frame__warn {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-}
-.avatar-frame__warn-letter {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  font-size: calc(var(--frame-size, 40px) * 0.28);
-  font-weight: 900;
-  color: #ef4444;
-  opacity: 0;
-  text-shadow: 1.5px 0 #7f1d1d, -1.5px 0 #fecaca, 0 0 7px rgba(239, 68, 68, 0.85);
-  animation: warn-float 6s linear infinite;
-}
-.wl-0 { animation-delay: 0s; }
-.wl-1 { animation-delay: 0.5s; }
-.wl-2 { animation-delay: 1s; }
-.wl-3 { animation-delay: 1.5s; }
-.wl-4 { animation-delay: 2s; }
-.wl-5 { animation-delay: 2.5s; }
-.wl-6 { animation-delay: 3s; }
-/* Melayang naik dari bawah-tengah + jitter/skew glitch, lalu memudar. */
-@keyframes warn-float {
-  0% { opacity: 0; transform: translate(-50%, 70%) scale(0.6) skewX(0deg); }
-  3% { opacity: 1; transform: translate(-46%, 45%) scale(0.9) skewX(-7deg); }
-  8% { transform: translate(-55%, 0%) scale(1.05) skewX(6deg); }
-  13% { opacity: 1; transform: translate(-48%, -70%) scale(1.05) skewX(-4deg); }
-  17% { opacity: 0; transform: translate(-50%, -150%) scale(1.1) skewX(0deg); }
-  100% { opacity: 0; transform: translate(-50%, -150%) scale(1.1); }
-}
-/* Kata utuh "WARNING" di TENGAH foto (muncul setelah huruf G), dengan glitch RGB. */
+/* Teks glitch "WARNING" merah yang muncul di TENGAH foto setiap 3 detik. */
 .avatar-frame__warn-full {
   position: absolute;
   left: 50%;
   top: 50%;
+  z-index: 5;
   transform: translate(-50%, -50%);
-  font-size: calc(var(--frame-size, 40px) * 0.2);
+  font-size: calc(var(--frame-size, 40px) * 0.19);
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   white-space: nowrap;
   color: #ef4444;
   opacity: 0;
+  pointer-events: none;
   text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
-  animation: warn-full 6s steps(1, end) infinite;
+  animation: warn-full 3s steps(1, end) infinite;
 }
 .avatar-frame__warn-full::before,
 .avatar-frame__warn-full::after {
@@ -546,12 +512,12 @@
 .avatar-frame__warn-full::before { color: #7f1d1d; animation: warn-g1 0.5s steps(2, end) infinite; }
 .avatar-frame__warn-full::after { color: #fecaca; animation: warn-g2 0.43s steps(2, end) infinite; }
 @keyframes warn-full {
-  0%, 66% { opacity: 0; }
-  69% { opacity: 0.95; }
-  71% { opacity: 0.4; }
-  74% { opacity: 1; }
-  85% { opacity: 0.85; }
-  90%, 100% { opacity: 0; }
+  0%, 16% { opacity: 0; }
+  22% { opacity: 0.95; }
+  26% { opacity: 0.4; }
+  32% { opacity: 1; }
+  60% { opacity: 0.9; }
+  70%, 100% { opacity: 0; }
 }
 @keyframes warn-g1 {
   0%, 100% { clip-path: inset(0 0 68% 0); transform: translateX(1.6px); }
