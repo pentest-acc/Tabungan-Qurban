@@ -7,7 +7,7 @@ export const BORDER_PROFIL = [
   { key: 'petir', label: 'Petir' },
   { key: 'air', label: 'Air' },
   { key: 'emas', label: 'Emas' },
-  { key: 'pelangi', label: 'Pelangi' },
+  { key: 'musik', label: 'Musik' },
   { key: 'aurora', label: 'Aurora' },
   { key: 'kosmik', label: 'Kosmik' },
 ];

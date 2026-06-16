@@ -11,7 +11,7 @@ const BORDER_VALID = [
   'petir',
   'air',
   'emas',
-  'pelangi',
+  'musik',
   'aurora',
   'kosmik',
 ];
