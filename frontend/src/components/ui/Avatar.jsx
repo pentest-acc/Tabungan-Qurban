@@ -41,17 +41,10 @@ export default function Avatar({
         </>
       )}
 
-      {/* Bloody: huruf WARNING melayang naik berurutan, lalu kata utuh di tengah */}
-      {border === 'bloody' && size >= 50 && (
-        <span className="avatar-frame__warn" aria-hidden="true">
-          {['W', 'A', 'R', 'N', 'I', 'N', 'G'].map((ch, i) => (
-            <span key={i} className={`avatar-frame__warn-letter wl-${i}`}>
-              {ch}
-            </span>
-          ))}
-          <span className="avatar-frame__warn-full" data-text="WARNING">
-            WARNING
-          </span>
+      {/* Bloody: teks glitch WARNING muncul di tengah foto tiap 3 detik */}
+      {border === 'bloody' && (
+        <span className="avatar-frame__warn-full" data-text="WARNING" aria-hidden="true">
+          WARNING
         </span>
       )}
 
