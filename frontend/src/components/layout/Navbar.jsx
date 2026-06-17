@@ -58,6 +58,9 @@ export default function Navbar({ onMenuClick }) {
               border={user?.border_profil}
               nama={user?.nama_lengkap || user?.username}
               size={38}
+              cropScale={user?.crop_scale}
+              cropX={user?.crop_x}
+              cropY={user?.crop_y}
             />
             <div className="hidden text-left sm:block">
               <p className="text-sm font-semibold leading-tight">{user?.nama_lengkap || user?.username}</p>
