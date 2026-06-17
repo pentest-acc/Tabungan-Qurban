@@ -133,6 +133,9 @@ export default function DetailKelompok() {
                       border={member.border_profil}
                       nama={member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
                       size={44}
+                      cropScale={member.crop_scale}
+                      cropX={member.crop_x}
+                      cropY={member.crop_y}
                     />
                     <span className="flex-1 text-sm font-medium">
                       {member.nama_lengkap || member.jamaah?.nama_lengkap || member.id_jamaah}
@@ -162,6 +165,9 @@ export default function DetailKelompok() {
               border={anggotaDipilih.border_profil}
               nama={anggotaDipilih.nama_lengkap || anggotaDipilih.jamaah?.nama_lengkap}
               size={104}
+              cropScale={anggotaDipilih.crop_scale}
+              cropX={anggotaDipilih.crop_x}
+              cropY={anggotaDipilih.crop_y}
             />
             <h3 className="mt-3 text-lg font-bold">
               {anggotaDipilih.nama_lengkap || anggotaDipilih.jamaah?.nama_lengkap}

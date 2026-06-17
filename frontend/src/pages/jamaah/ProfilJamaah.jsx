@@ -61,6 +61,9 @@ export default function ProfilJamaah() {
             border={user?.border_profil}
             nama={user?.nama_lengkap || user?.username}
             size={104}
+            cropScale={user?.crop_scale}
+            cropX={user?.crop_x}
+            cropY={user?.crop_y}
           />
           <h2 className="mt-3 text-lg font-bold">{user?.nama_lengkap || user?.username}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">@{user?.username}</p>

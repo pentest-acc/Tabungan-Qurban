@@ -18,11 +18,20 @@ export default function Avatar({
   nama = '',
   size = 40,
   className = '',
+  cropScale = 1,
+  cropX = 50,
+  cropY = 50,
 }) {
   const ini = inisial(nama);
   const mediaSrc = resolveMediaUrl(src);
   // Bingkai api memilih skala filter turbulensi sesuai ukuran (px tetap di SVG).
   const fireTier = border === 'api' ? (size > 64 ? ' avatar-frame--fire-lg' : ' avatar-frame--fire-sm') : '';
+  // Framing media (zoom + posisi fokus) — berlaku gambar/gif/video, animasi utuh.
+  const mediaStyle = {
+    objectPosition: `${cropX}% ${cropY}%`,
+    transform: `scale(${cropScale})`,
+    transformOrigin: `${cropX}% ${cropY}%`,
+  };
 
   return (
     <div
@@ -69,19 +78,47 @@ export default function Avatar({
         </>
       )}
 
-      {/* Kosmik: komet jatuh dari kanan-atas ke kiri-bawah dengan ekor cahaya */}
+      {/* Kosmik: komet meluncur ke tengah lalu MELEDAK jadi 8 bintang ke segala
+          arah (hingga keluar bingkai). Komet dalam wadah lingkaran (terpotong),
+          bintang ledakan sebagai anak langsung agar bisa terbang keluar. */}
       {border === 'kosmik' && (
-        <span className="avatar-frame__sky" aria-hidden="true">
-          <span className="avatar-frame__comet" />
-        </span>
+        <>
+          <span className="avatar-frame__sky" aria-hidden="true">
+            <span className="avatar-frame__comet" />
+          </span>
+          {Array.from({ length: 8 }).map((_, i) => {
+            const a = (i * 45 * Math.PI) / 180;
+            return (
+              <span
+                key={i}
+                className="avatar-frame__star"
+                aria-hidden="true"
+                style={{
+                  '--tx': `calc(var(--frame-size, 40px) * ${(Math.cos(a) * 0.85).toFixed(3)})`,
+                  '--ty': `calc(var(--frame-size, 40px) * ${(Math.sin(a) * 0.85).toFixed(3)})`,
+                }}
+              >
+                ✦
+              </span>
+            );
+          })}
+        </>
       )}
 
       <div className="avatar-frame__inner">
         {mediaSrc ? (
           tipe === 'video' ? (
-            <video src={mediaSrc} className="h-full w-full object-cover" autoPlay loop muted playsInline />
+            <video
+              src={mediaSrc}
+              className="h-full w-full object-cover"
+              style={mediaStyle}
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
           ) : (
-            <img src={mediaSrc} alt={nama || 'Avatar'} className="h-full w-full object-cover" />
+            <img src={mediaSrc} alt={nama || 'Avatar'} className="h-full w-full object-cover" style={mediaStyle} />
           )
         ) : ini ? (
           <span

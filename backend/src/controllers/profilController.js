@@ -22,7 +22,15 @@ const bentukProfil = (profil) => ({
   foto_profil: profil?.foto_profil || '',
   tipe_media: profil?.tipe_media || 'gambar',
   border_profil: profil?.border_profil || 'none',
+  // Parameter crop (framing) — zoom & posisi fokus, berlaku utk gambar/gif/video.
+  crop_scale: profil?.crop_scale ?? 1,
+  crop_x: profil?.crop_x ?? 50,
+  crop_y: profil?.crop_y ?? 50,
 });
+
+// Batasi nilai crop ke rentang aman.
+const klampScale = (v) => Math.min(4, Math.max(1, Number(v) || 1));
+const klampPos = (v) => Math.min(100, Math.max(0, Number(v) ?? 50));
 
 // Ambil profil media milik salah satu pengguna (dipakai juga oleh authController).
 async function ambilProfil(idPengguna) {
@@ -48,6 +56,11 @@ exports.updateMine = asyncHandler(async (req, res) => {
     }
     update.border_profil = req.body.border_profil;
   }
+
+  // 1b) Parameter crop (zoom & posisi fokus)
+  if (req.body.crop_scale !== undefined) update.crop_scale = klampScale(req.body.crop_scale);
+  if (req.body.crop_x !== undefined) update.crop_x = klampPos(req.body.crop_x);
+  if (req.body.crop_y !== undefined) update.crop_y = klampPos(req.body.crop_y);
 
   // 2) Media (opsional). Pakai Cloudinary bila terkonfigurasi; jika tidak,
   //    simpan ke disk server lokal agar fitur tetap berjalan tanpa akun.

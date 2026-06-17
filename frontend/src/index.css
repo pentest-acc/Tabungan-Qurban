@@ -564,7 +564,7 @@
   overflow: hidden;
   pointer-events: none;
 }
-/* Komet jatuh dari kanan-atas ke kiri-bawah dengan ekor cahaya */
+/* Komet meluncur dari kanan-atas menuju TENGAH lalu lenyap (titik ledakan) */
 .avatar-frame__comet {
   position: absolute;
   top: 50%;
@@ -579,7 +579,7 @@
     rgba(255, 255, 255, 0.95)
   );
   opacity: 0;
-  animation: kosmik-comet 3s ease-in infinite;
+  animation: kosmik-comet 4s ease-in infinite;
 }
 /* Kepala komet yang menyala terang di ujung depan ekor */
 .avatar-frame__comet::after {
@@ -597,22 +597,44 @@
 @keyframes kosmik-comet {
   0% {
     transform: translate(-50%, -50%)
-      translate(calc(var(--frame-size, 40px) * 0.75), calc(var(--frame-size, 40px) * -0.75))
+      translate(calc(var(--frame-size, 40px) * 0.62), calc(var(--frame-size, 40px) * -0.62))
       rotate(135deg);
     opacity: 0;
   }
   12% { opacity: 1; }
-  48% { opacity: 1; }
-  60% {
-    transform: translate(-50%, -50%)
-      translate(calc(var(--frame-size, 40px) * -0.75), calc(var(--frame-size, 40px) * 0.75))
-      rotate(135deg);
+  40% { opacity: 1; }
+  46% {
+    transform: translate(-50%, -50%) translate(0px, 0px) rotate(135deg) scale(0.6);
     opacity: 0;
   }
   100% {
-    transform: translate(-50%, -50%)
-      translate(calc(var(--frame-size, 40px) * -0.75), calc(var(--frame-size, 40px) * 0.75))
-      rotate(135deg);
+    transform: translate(-50%, -50%) translate(0px, 0px) rotate(135deg) scale(0.6);
     opacity: 0;
+  }
+}
+/* Ledakan: 8 bintang menyembur dari tengah ke segala arah (boleh keluar bingkai) */
+.avatar-frame__star {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  font-size: calc(var(--frame-size, 40px) * 0.18);
+  line-height: 1;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 5px #c084fc, 0 0 10px #a855f7;
+  animation: kosmik-burst 4s ease-out infinite;
+}
+@keyframes kosmik-burst {
+  0%, 44% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(0deg); }
+  48% { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(25deg); }
+  74% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) scale(0.4) rotate(160deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--tx, 0px)), calc(-50% + var(--ty, 0px))) scale(0.4) rotate(160deg);
   }
 }

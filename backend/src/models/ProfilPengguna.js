@@ -14,6 +14,11 @@ const profilSchema = new mongoose.Schema(
     foto_profil: { type: String, default: '' }, // URL Cloudinary
     tipe_media: { type: String, enum: ['gambar', 'video'], default: 'gambar' },
     border_profil: { type: String, default: 'none' },
+    // Crop/framing (zoom & posisi fokus) — diterapkan via CSS saat ditampilkan,
+    // sehingga animasi GIF/video tetap utuh (tanpa encode ulang).
+    crop_scale: { type: Number, default: 1 },
+    crop_x: { type: Number, default: 50 },
+    crop_y: { type: Number, default: 50 },
   },
   { collection: 'profil_pengguna', timestamps: true }
 );

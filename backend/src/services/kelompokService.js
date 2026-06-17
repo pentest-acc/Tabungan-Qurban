@@ -40,6 +40,9 @@ async function daftarAnggota(idKelompok) {
         foto_profil: profil?.foto_profil || '',
         tipe_media: profil?.tipe_media || 'gambar',
         border_profil: profil?.border_profil || 'none',
+        crop_scale: profil?.crop_scale ?? 1,
+        crop_x: profil?.crop_x ?? 50,
+        crop_y: profil?.crop_y ?? 50,
         bergabung_sejak: detail.createdAt,
       };
     })
