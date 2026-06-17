@@ -564,51 +564,62 @@
   overflow: hidden;
   pointer-events: none;
 }
-/* Komet meluncur dari kanan-atas menuju TENGAH lalu lenyap (titik ledakan) */
+/* Komet: titik anchor = KEPALA komet, meluncur dari kanan-atas TEPAT ke tengah
+   lalu lenyap (titik ledakan = tengah, sinkron dgn semburan bintang).
+   Ekor dibuat di ::before (memanjang ke kanan-atas), kepala menyala di ::after. */
 .avatar-frame__comet {
   position: absolute;
-  top: 50%;
   left: 50%;
-  width: calc(var(--frame-size, 40px) * 0.55);
-  height: calc(var(--frame-size, 40px) * 0.035);
-  border-radius: 9999px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(196, 181, 253, 0.25) 55%,
-    rgba(255, 255, 255, 0.95)
-  );
+  top: 50%;
+  width: 0;
+  height: 0;
   opacity: 0;
   animation: kosmik-comet 4s ease-in infinite;
 }
-/* Kepala komet yang menyala terang di ujung depan ekor */
+/* Ekor komet — memanjang ke kanan-atas (arah belakang) dari kepala */
+.avatar-frame__comet::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(var(--frame-size, 40px) * -0.0175);
+  width: calc(var(--frame-size, 40px) * 0.5);
+  height: calc(var(--frame-size, 40px) * 0.035);
+  border-radius: 9999px;
+  transform-origin: left center;
+  transform: rotate(-45deg);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.9),
+    rgba(196, 181, 253, 0.25) 55%,
+    transparent
+  );
+}
+/* Kepala komet menyala, TEPAT di titik anchor (0,0) */
 .avatar-frame__comet::after {
   content: '';
   position: absolute;
-  right: 0;
-  top: 50%;
-  width: calc(var(--frame-size, 40px) * 0.09);
-  height: calc(var(--frame-size, 40px) * 0.09);
-  transform: translate(40%, -50%);
+  left: 0;
+  top: 0;
+  width: calc(var(--frame-size, 40px) * 0.1);
+  height: calc(var(--frame-size, 40px) * 0.1);
+  transform: translate(-50%, -50%);
   border-radius: 9999px;
   background: radial-gradient(circle, #fff 30%, #c4b5fd 70%, transparent);
   box-shadow: 0 0 6px 2px rgba(196, 181, 253, 0.9), 0 0 12px 4px rgba(255, 255, 255, 0.55);
 }
 @keyframes kosmik-comet {
   0% {
-    transform: translate(-50%, -50%)
-      translate(calc(var(--frame-size, 40px) * 0.62), calc(var(--frame-size, 40px) * -0.62))
-      rotate(135deg);
+    transform: translate(calc(var(--frame-size, 40px) * 0.62), calc(var(--frame-size, 40px) * -0.62));
     opacity: 0;
   }
   12% { opacity: 1; }
   40% { opacity: 1; }
   46% {
-    transform: translate(-50%, -50%) translate(0px, 0px) rotate(135deg) scale(0.6);
+    transform: translate(0px, 0px) scale(0.5);
     opacity: 0;
   }
   100% {
-    transform: translate(-50%, -50%) translate(0px, 0px) rotate(135deg) scale(0.6);
+    transform: translate(0px, 0px) scale(0.5);
     opacity: 0;
   }
 }

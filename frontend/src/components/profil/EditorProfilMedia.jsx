@@ -136,14 +136,7 @@ export default function EditorProfilMedia() {
       <div className="mt-5 flex flex-col items-center gap-5 sm:flex-row sm:items-start">
         {/* Pratinjau + crop */}
         <div className="flex flex-col items-center gap-3">
-          <div
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerLeave={onPointerUp}
-            className={adaMedia ? 'cursor-move touch-none select-none' : ''}
-            title={adaMedia ? 'Seret untuk menggeser fokus' : ''}
-          >
+          <div className="relative" style={{ width: 128, height: 128 }}>
             <Avatar
               src={src}
               tipe={tipe}
@@ -154,6 +147,19 @@ export default function EditorProfilMedia() {
               cropX={cropX}
               cropY={cropY}
             />
+            {/* Overlay transparan: area seret yang SERAGAM untuk gambar & video,
+                karena event pointer tidak selalu diteruskan oleh elemen <video>. */}
+            {adaMedia && (
+              <div
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerLeave={onPointerUp}
+                className="absolute inset-0 cursor-move touch-none rounded-full"
+                style={{ zIndex: 10 }}
+                title="Seret untuk menggeser fokus"
+              />
+            )}
           </div>
 
           {/* Zoom */}

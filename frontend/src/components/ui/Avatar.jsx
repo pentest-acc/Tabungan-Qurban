@@ -116,9 +116,16 @@ export default function Avatar({
               loop
               muted
               playsInline
+              draggable={false}
             />
           ) : (
-            <img src={mediaSrc} alt={nama || 'Avatar'} className="h-full w-full object-cover" style={mediaStyle} />
+            <img
+              src={mediaSrc}
+              alt={nama || 'Avatar'}
+              className="h-full w-full object-cover"
+              style={mediaStyle}
+              draggable={false}
+            />
           )
         ) : ini ? (
           <span
