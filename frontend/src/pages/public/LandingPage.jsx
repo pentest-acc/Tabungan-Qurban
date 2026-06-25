@@ -16,6 +16,7 @@ import {
   ClockIcon,
 } from '@heroicons/react/24/outline';
 import PublicNavbar from '../../components/layout/PublicNavbar';
+import LaporDeveloper from '../../components/feedback/LaporDeveloper';
 import { formatRupiah } from '../../utils/format';
 
 // Identitas & lokasi masjid penyelenggara.
@@ -570,6 +571,12 @@ export default function LandingPage() {
                   <a href="#keamanan" className="transition-colors hover:text-primary-600">
                     Keamanan
                   </a>
+                </li>
+                <li>
+                  <LaporDeveloper
+                    label="Lapor Bug / Saran"
+                    className="transition-colors hover:text-primary-600"
+                  />
                 </li>
               </ul>
             </div>
