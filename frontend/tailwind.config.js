@@ -5,6 +5,9 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Off-white lembut menggantikan putih murni (#fff) agar mode terang tidak
+        // menyengat mata — berlaku global untuk semua bg-white/text-white/border-white.
+        white: '#f7f8fa',
         primary: {
           50: '#f0fdf4',
           100: '#dcfce7',
