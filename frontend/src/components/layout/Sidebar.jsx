@@ -68,7 +68,7 @@ export default function Sidebar({ open, onClose }) {
               <p className="text-xs text-slate-500 dark:text-slate-400">Masjid Jami Nurul Hikmah</p>
             </div>
           </div>
-          <button onClick={onClose} className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800">
+          <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 lg:hidden dark:hover:bg-slate-800">
             <XMarkIcon className="h-5 w-5" />
           </button>
         </div>
