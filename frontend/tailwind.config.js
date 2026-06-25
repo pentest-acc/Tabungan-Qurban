@@ -7,7 +7,7 @@ export default {
       colors: {
         // Off-white lembut menggantikan putih murni (#fff) agar mode terang tidak
         // menyengat mata — berlaku global untuk semua bg-white/text-white/border-white.
-        white: '#f7f8fa',
+        white: '#f3f4f7',
         primary: {
           50: '#f0fdf4',
           100: '#dcfce7',

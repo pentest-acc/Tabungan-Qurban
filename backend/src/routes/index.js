@@ -13,5 +13,6 @@ router.use('/notifikasi', require('./notifikasiRoutes'));
 router.use('/broadcast', require('./broadcastRoutes'));
 router.use('/laporan', require('./laporanRoutes'));
 router.use('/profil', require('./profilRoutes'));
+router.use('/feedback', require('./feedbackRoutes'));
 
 module.exports = router;
