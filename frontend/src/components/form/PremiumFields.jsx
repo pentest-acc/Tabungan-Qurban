@@ -24,12 +24,12 @@ function FieldError({ error }) {
 }
 
 const baseInput =
-  'w-full rounded-xl border bg-white/90 py-3 text-sm text-slate-900 placeholder-slate-400 shadow-sm backdrop-blur transition-all duration-200 focus:outline-none focus:ring-4 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500';
+  'w-full rounded-xl border bg-white/70 py-3 text-sm text-slate-800 placeholder-slate-400 shadow-sm backdrop-blur transition-all duration-200 focus:outline-none focus:ring-4 dark:bg-slate-900/60 dark:text-slate-100 dark:placeholder-slate-500';
 
 const stateClass = (error) =>
   error
     ? 'border-red-400 focus:border-red-500 focus:ring-red-500/10 dark:border-red-500/60'
-    : 'border-slate-300 hover:border-slate-400 focus:border-primary-500 focus:ring-primary-500/10 dark:border-slate-700 dark:hover:border-slate-600 dark:focus:border-primary-500';
+    : 'border-slate-200 hover:border-slate-300 focus:border-primary-500 focus:ring-primary-500/10 dark:border-slate-700 dark:hover:border-slate-600 dark:focus:border-primary-500';
 
 export const PremiumInput = forwardRef(function PremiumInput(
   { label, icon: Icon, error, type = 'text', className = '', ...props },
