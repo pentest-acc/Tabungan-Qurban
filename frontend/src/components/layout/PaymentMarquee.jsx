@@ -141,7 +141,7 @@ export default function PaymentMarquee() {
                   initial={{ width: 0, opacity: 0 }}
                   animate={{ width: 'auto', opacity: 1 }}
                   transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className="flex items-center gap-1.5 whitespace-nowrap bg-slate-900/90 px-2.5 py-1 text-white dark:bg-black/70"
+                  className="flex items-center gap-1.5 whitespace-nowrap bg-slate-700 px-2.5 py-1 text-white dark:bg-black/70"
                 >
                   <motion.span
                     initial={{ scale: 0, rotate: -25 }}

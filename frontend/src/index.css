@@ -135,9 +135,10 @@
 
 /* ===== Utilitas desain premium (landing / login / register) ===== */
 
-/* Panel kaca (glassmorphism) */
+/* Panel kaca (glassmorphism) — di light dibuat lebih solid + border slate agar
+   kontras & nyaman dibaca (tidak pudar/menyilaukan); gelap tetap seperti semula. */
 .glass {
-  @apply border border-white/50 bg-white/70 shadow-xl shadow-slate-900/5 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/20;
+  @apply border border-slate-200/80 bg-white/85 shadow-xl shadow-slate-900/[0.06] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-black/20;
 }
 
 /* Pola grid halus untuk latar */
