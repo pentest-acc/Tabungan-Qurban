@@ -26,6 +26,15 @@ export default function PublicNavbar() {
 
   const tutup = () => setMenuOpen(false);
 
+  // Navigasi seksi untuk menu mobile: scroll ditangani eksplisit agar tidak
+  // dibatalkan oleh animasi penutupan menu (anchor default kadang gagal di mobile).
+  const keSeksi = (e, href) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <motion.header
       initial={{ y: -64, opacity: 0 }}
@@ -122,7 +131,7 @@ export default function PublicNavbar() {
                 <a
                   key={link.href}
                   href={link.href}
-                  onClick={tutup}
+                  onClick={(e) => keSeksi(e, link.href)}
                   className="block rounded-lg px-3 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
                   {link.label}
