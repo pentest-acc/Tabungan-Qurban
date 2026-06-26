@@ -575,7 +575,7 @@ export default function LandingPage() {
                 <li>
                   <LaporDeveloper
                     label="Lapor Bug / Saran"
-                    className="transition-colors hover:text-primary-600"
+                    className="block p-0 text-left text-slate-600 transition-colors hover:text-primary-600 dark:text-slate-300"
                   />
                 </li>
               </ul>
