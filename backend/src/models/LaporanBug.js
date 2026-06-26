@@ -9,6 +9,7 @@ const laporanSchema = new mongoose.Schema(
     kategori: { type: String, enum: ['bug', 'saran', 'lainnya'], default: 'lainnya' },
     pesan: { type: String, required: true },
     kontak: { type: String, default: '' },
+    lampiran: { type: String, default: '' }, // path gambar (bila ada)
     id_pengirim: { type: String, default: '' },
     peran_pengirim: { type: String, default: 'tamu' },
     email_terkirim: { type: Boolean, default: false },
