@@ -17,10 +17,11 @@ const emailDikonfigurasi = () =>
 // Email tujuan default = email developer (bisa di-override lewat .env).
 const EMAIL_DEVELOPER = process.env.LAPORAN_EMAIL || 'stephenbaldwin2005s@gmail.com';
 
-async function kirimEmail({ subjek, teks, replyTo }) {
+async function kirimEmail({ subjek, teks, replyTo, attachments }) {
   if (!nodemailer || !emailDikonfigurasi()) {
     console.log(
       `[Email - simulasi] ke ${EMAIL_DEVELOPER}\nSubjek: ${subjek}\n${teks}\n` +
+        (attachments?.length ? `Lampiran: ${attachments.length} berkas\n` : '') +
         '(Isi SMTP_HOST/SMTP_USER/SMTP_PASS di .env untuk benar-benar mengirim email.)'
     );
     return { terkirim: false, simulasi: true };
@@ -40,6 +41,7 @@ async function kirimEmail({ subjek, teks, replyTo }) {
       replyTo: replyTo || undefined,
       subject: subjek,
       text: teks,
+      attachments: attachments && attachments.length ? attachments : undefined,
     });
     return { terkirim: true };
   } catch (err) {

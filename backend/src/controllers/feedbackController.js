@@ -1,5 +1,6 @@
 const LaporanBug = require('../models/LaporanBug');
 const { kirimEmail } = require('../utils/kirimEmail');
+const { simpanMediaLokal } = require('../utils/localStorage');
 const { ok, ApiError, asyncHandler } = require('../utils/response');
 
 const KATEGORI = ['bug', 'saran', 'lainnya'];
@@ -15,19 +16,38 @@ exports.buat = asyncHandler(async (req, res) => {
   const pesanBersih = String(pesan).trim();
   const kontakBersih = (kontak || '').toString().trim().slice(0, 200);
 
+  // Lampiran gambar (opsional): di-attach ke email + disimpan ke disk utk arsip.
+  let lampiranPath = '';
+  const attachments = [];
+  if (req.file) {
+    attachments.push({ filename: req.file.originalname || 'lampiran', content: req.file.buffer });
+    try {
+      lampiranPath = simpanMediaLokal(req.file, 'laporan');
+    } catch (err) {
+      console.error('Gagal menyimpan lampiran laporan:', err.message);
+    }
+  }
+
   const subjek = `[Lapor ${kat.toUpperCase()}] Tabungan Qurban`;
   const teks =
     `Kategori : ${kat}\n` +
     `Kontak   : ${kontakBersih || '-'}\n` +
-    `Waktu    : ${new Date().toLocaleString('id-ID')}\n\n` +
+    `Waktu    : ${new Date().toLocaleString('id-ID')}\n` +
+    `Lampiran : ${req.file ? 'ada (terlampir di email)' : '-'}\n\n` +
     `Pesan:\n${pesanBersih}`;
 
-  const hasil = await kirimEmail({ subjek, teks, replyTo: kontakBersih || undefined });
+  const hasil = await kirimEmail({
+    subjek,
+    teks,
+    replyTo: kontakBersih || undefined,
+    attachments,
+  });
 
   await LaporanBug.create({
     kategori: kat,
     pesan: pesanBersih,
     kontak: kontakBersih,
+    lampiran: lampiranPath,
     email_terkirim: !!hasil.terkirim,
   });
 

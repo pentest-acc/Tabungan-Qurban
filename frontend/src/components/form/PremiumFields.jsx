@@ -47,7 +47,7 @@ export const PremiumInput = forwardRef(function PremiumInput(
       )}
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500 dark:text-slate-300" />
+          <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-600 dark:text-slate-300" />
         )}
         <input
           ref={ref}
@@ -60,7 +60,7 @@ export const PremiumInput = forwardRef(function PremiumInput(
             type="button"
             tabIndex={-1}
             onClick={() => setShowPassword((s) => !s)}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-300 dark:hover:text-white"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-600 transition-colors hover:text-slate-800 dark:text-slate-300 dark:hover:text-white"
             aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
           >
             {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}

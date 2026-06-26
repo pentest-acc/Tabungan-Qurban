@@ -5,7 +5,7 @@ const path = require('path');
 // belum dikonfigurasi, sehingga fitur upload langsung berfungsi tanpa akun apa
 // pun. Berkas disimpan di backend/uploads/profil dan disajikan oleh Express
 // pada path /uploads (lihat app.js).
-const DIR_PROFIL = path.join(__dirname, '..', '..', 'uploads', 'profil');
+const DIR_UPLOAD = path.join(__dirname, '..', '..', 'uploads');
 
 const EXT_MIME = {
   'image/png': '.png',
@@ -24,12 +24,14 @@ function ekstensiBerkas(file) {
   return EXT_MIME[file.mimetype] || '';
 }
 
-// Simpan buffer multer ke disk, kembalikan PATH RELATIF (mis. /uploads/profil/xxx.png).
-function simpanMediaLokal(file) {
-  fs.mkdirSync(DIR_PROFIL, { recursive: true });
-  const nama = `prf-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ekstensiBerkas(file)}`;
-  fs.writeFileSync(path.join(DIR_PROFIL, nama), file.buffer);
-  return `/uploads/profil/${nama}`;
+// Simpan buffer multer ke disk pada subfolder uploads/<sub>, kembalikan PATH
+// RELATIF (mis. /uploads/profil/xxx.png).
+function simpanMediaLokal(file, sub = 'profil') {
+  const dir = path.join(DIR_UPLOAD, sub);
+  fs.mkdirSync(dir, { recursive: true });
+  const nama = `${sub}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ekstensiBerkas(file)}`;
+  fs.writeFileSync(path.join(dir, nama), file.buffer);
+  return `/uploads/${sub}/${nama}`;
 }
 
 module.exports = { simpanMediaLokal };
